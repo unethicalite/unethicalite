@@ -11,51 +11,51 @@ import net.runelite.client.config.Range;
 public interface HootFighterConfig extends Config
 {
 	@ConfigSection(
-					name = "General",
-					description = "General settings",
-					position = 0,
-					closedByDefault = true
+		name = "General",
+		description = "General settings",
+		position = 0,
+		closedByDefault = true
 	)
 	String general = "General";
 
 	@ConfigSection(
-					name = "Health",
-					description = "General settings",
-					position = 1,
-					closedByDefault = true
+		name = "Health",
+		description = "General settings",
+		position = 1,
+		closedByDefault = true
 	)
 	String health = "Health";
 
 	@ConfigSection(
-					name = "Loot",
-					description = "Loot settings",
-					position = 2,
-					closedByDefault = true
+		name = "Loot",
+		description = "Loot settings",
+		position = 2,
+		closedByDefault = true
 	)
 	String loot = "Loot";
 
 	@ConfigSection(
-					name = "Prayers",
-					description = "Prayers settings",
-					position = 3,
-					closedByDefault = true
+		name = "Prayers",
+		description = "Prayers settings",
+		position = 3,
+		closedByDefault = true
 	)
 	String prayers = "Prayers";
 
 	@ConfigSection(
-					name = "Alching",
-					description = "Alching settings",
-					position = 4,
-					closedByDefault = true
+		name = "Alching",
+		description = "Alching settings",
+		position = 4,
+		closedByDefault = true
 	)
 	String alching = "Alching";
 
 	@ConfigItem(
-					keyName = "monster",
-					name = "Monster",
-					description = "Monster to kill",
-					position = 0,
-					section = general
+		keyName = "monster",
+		name = "Monster",
+		description = "Monster to kill",
+		position = 0,
+		section = general
 	)
 	default String monster()
 	{
@@ -64,11 +64,11 @@ public interface HootFighterConfig extends Config
 
 	@Range(max = 100)
 	@ConfigItem(
-					keyName = "attackRange",
-					name = "Attack range",
-					description = "Monster attack range",
-					position = 1,
-					section = general
+		keyName = "attackRange",
+		name = "Attack range",
+		description = "Monster attack range",
+		position = 1,
+		section = general
 	)
 	default int attackRange()
 	{
@@ -76,11 +76,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "bury",
-					name = "Bury bones",
-					description = "Bury bones",
-					position = 2,
-					section = general
+		keyName = "bury",
+		name = "Bury bones",
+		description = "Bury bones",
+		position = 2,
+		section = general
 	)
 	default boolean buryBones()
 	{
@@ -88,11 +88,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "loots",
-					name = "Loot Items",
-					description = "Items to loot separated by comma. ex: Lobster,Tuna",
-					position = 0,
-					section = loot
+		keyName = "loots",
+		name = "Loot Items",
+		description = "Items to loot separated by comma. ex: Lobster,Tuna",
+		position = 0,
+		section = loot
 	)
 	default String loot()
 	{
@@ -100,11 +100,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "lootValue",
-					name = "Loot GP value",
-					description = "Items to loot by value, -1 to check by name only",
-					position = 1,
-					section = loot
+		keyName = "lootValue",
+		name = "Loot GP value",
+		description = "Items to loot by value, -1 to check by name only",
+		position = 1,
+		section = loot
 	)
 	default int lootValue()
 	{
@@ -112,11 +112,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "untradables",
-					name = "Loot untradables",
-					description = "Loot untradables",
-					position = 2,
-					section = loot
+		keyName = "untradables",
+		name = "Loot untradables",
+		description = "Loot untradables",
+		position = 2,
+		section = loot
 	)
 	default boolean untradables()
 	{
@@ -124,11 +124,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "eat",
-					name = "Eat food",
-					description = "Eat food to heal",
-					position = 0,
-					section = health
+		keyName = "eat",
+		name = "Eat food",
+		description = "Eat food to heal",
+		position = 0,
+		section = health
 	)
 	default boolean eat()
 	{
@@ -137,11 +137,11 @@ public interface HootFighterConfig extends Config
 
 	@Range(max = 100)
 	@ConfigItem(
-					keyName = "eatHealthPercent",
-					name = "Health %",
-					description = "Health % to eat at",
-					position = 1,
-					section = health
+		keyName = "eatHealthPercent",
+		name = "Health %",
+		description = "Health % to eat at",
+		position = 1,
+		section = health
 	)
 	default int healthPercent()
 	{
@@ -149,11 +149,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "foods",
-					name = "Food",
-					description = "Food to eat, separated by comma. ex: Bones,Coins",
-					position = 0,
-					section = health
+		keyName = "foods",
+		name = "Food",
+		description = "Food to eat, separated by comma. ex: Bones,Coins",
+		position = 0,
+		section = health
 	)
 	default String foods()
 	{
@@ -161,11 +161,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "quickPrayer",
-					name = "Use Quick Prayers",
-					description = "Use Quick Prayers",
-					position = 0,
-					section = prayers
+		keyName = "quickPrayer",
+		name = "Use Quick Prayers",
+		description = "Use Quick Prayers",
+		position = 0,
+		section = prayers
 	)
 	default boolean quickPrayer()
 	{
@@ -173,11 +173,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "flick",
-					name = "Flick",
-					description = "One ticks quick prayers",
-					position = 1,
-					section = prayers
+		keyName = "flick",
+		name = "Flick",
+		description = "One ticks quick prayers",
+		position = 1,
+		section = prayers
 	)
 	default boolean flick()
 	{
@@ -185,11 +185,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "restore",
-					name = "Restore prayer",
-					description = "Drinks pots to restore prayer points",
-					position =  2,
-					section = prayers
+		keyName = "restore",
+		name = "Restore prayer",
+		description = "Drinks pots to restore prayer points",
+		position = 2,
+		section = prayers
 	)
 	default boolean restore()
 	{
@@ -197,11 +197,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "alch",
-					name = "Alch items",
-					description = "Alchs items",
-					position = 0,
-					section = alching
+		keyName = "alch",
+		name = "Alch items",
+		description = "Alchs items",
+		position = 0,
+		section = alching
 	)
 	default boolean alching()
 	{
@@ -209,11 +209,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "alchSpell",
-					name = "Alch spell",
-					description = "Alch spell",
-					position = 1,
-					section = alching
+		keyName = "alchSpell",
+		name = "Alch spell",
+		description = "Alch spell",
+		position = 1,
+		section = alching
 	)
 	default AlchSpell alchSpell()
 	{
@@ -221,11 +221,11 @@ public interface HootFighterConfig extends Config
 	}
 
 	@ConfigItem(
-					keyName = "alchItems",
-					name = "Alch items",
-					description = "Items to alch, separated by comma. ex: Maple shortbow,Rune scimitar",
-					position = 2,
-					section = alching
+		keyName = "alchItems",
+		name = "Alch items",
+		description = "Items to alch, separated by comma. ex: Maple shortbow,Rune scimitar",
+		position = 2,
+		section = alching
 	)
 	default String alchItems()
 	{
