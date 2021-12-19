@@ -30,6 +30,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Provides;
+import dev.hoot.api.commons.Time;
+import dev.hoot.api.game.GameThread;
+import dev.hoot.api.items.Bank;
+import dev.hoot.api.items.Equipment;
+import dev.hoot.api.items.Inventory;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
@@ -46,6 +51,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -1529,6 +1536,70 @@ public class InventorySetupsPlugin extends Plugin
 			"Setup data was copied to clipboard.",
 			"Export Setup Succeeded",
 			JOptionPane.PLAIN_MESSAGE);
+	}
+
+	public void withdrawSetup(final InventorySetup setup)
+	{
+		GameThread.invoke(() -> {
+			Bank.depositInventory();
+			Bank.depositEquipment();
+			for (InventorySetupsItem isi : setup.getEquipment().stream().filter(Objects::nonNull).toList())
+			{
+				if (!Inventory.contains(isi.getId()) && !Equipment.contains(isi.getId()))
+				{
+					Optional.ofNullable(Bank.getFirst(isi.getId())).ifPresent(item -> {
+						if (isi.getQuantity() >= item.getQuantity())
+						{
+							Bank.withdrawAll(isi.getId(), Bank.WithdrawMode.ITEM);
+						}
+						else
+						{
+							Bank.withdraw(isi.getId(), isi.getQuantity(), Bank.WithdrawMode.ITEM);
+						}
+					});
+				}
+			}
+		});
+
+		Time.sleepUntil(() -> GameThread.invokeLater(() -> {
+			for (InventorySetupsItem isi : setup.getEquipment().stream().filter(Objects::nonNull).toList())
+			{
+				if (!Inventory.contains(isi.getId()))
+				{
+					return false;
+				}
+			}
+			return true;
+		}), 3000);
+
+		GameThread.invoke(() -> {
+			for (InventorySetupsItem isi : setup.getEquipment())
+			{
+				Optional.ofNullable(Inventory.getFirst(isi.getId())).ifPresent(item -> {
+					item.interact(9, MenuAction.CC_OP_LOW_PRIORITY.getId(), item.getSlot(), WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER.getPackedId());
+				});
+			}
+		});
+
+		GameThread.invoke(() -> {
+			for (InventorySetupsItem isi : setup.getInventory().stream().filter(Objects::nonNull).toList())
+			{
+				if (!Inventory.contains(isi.getId()))
+				{
+					Optional.ofNullable(Bank.getFirst(isi.getId())).ifPresent(item -> {
+						if (isi.getQuantity() >= item.getQuantity())
+						{
+							Bank.withdrawAll(isi.getId(), Bank.WithdrawMode.ITEM);
+						}
+						else
+						{
+							Bank.withdraw(isi.getId(), isi.getQuantity(), Bank.WithdrawMode.ITEM);
+						}
+					});
+				}
+			}
+		});
+
 	}
 
 	public void massExportSetups()

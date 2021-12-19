@@ -24,24 +24,8 @@
  */
 package net.runelite.client.plugins.inventorysetups.ui;
 
-import net.runelite.client.plugins.inventorysetups.InventorySetup;
-import net.runelite.client.plugins.inventorysetups.InventorySetupsPlugin;
-
-import net.runelite.client.ui.ColorScheme;
-import net.runelite.client.ui.FontManager;
-import net.runelite.client.ui.components.FlatTextField;
-import net.runelite.client.ui.components.colorpicker.RuneliteColorPicker;
-import net.runelite.client.util.ImageUtil;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
+import dev.hoot.api.game.GameThread;
+import dev.hoot.api.items.Bank;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -51,14 +35,32 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.util.stream.Collectors;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+import net.runelite.client.plugins.inventorysetups.InventorySetup;
+import net.runelite.client.plugins.inventorysetups.InventorySetupsItem;
+import net.runelite.client.plugins.inventorysetups.InventorySetupsPlugin;
+import net.runelite.client.ui.ColorScheme;
+import net.runelite.client.ui.FontManager;
+import net.runelite.client.ui.components.FlatTextField;
+import net.runelite.client.ui.components.colorpicker.RuneliteColorPicker;
+import net.runelite.client.util.ImageUtil;
 
 // Standard panel for inventory setups, which contains all the configuration buttons
 public class InventorySetupsStandardPanel extends InventorySetupsPanel
 {
 
 	private static final Border NAME_BOTTOM_BORDER = new CompoundBorder(
-			BorderFactory.createMatteBorder(0, 0, 1, 0, ColorScheme.DARK_GRAY_COLOR),
-			BorderFactory.createLineBorder(ColorScheme.DARKER_GRAY_COLOR));
+		BorderFactory.createMatteBorder(0, 0, 1, 0, ColorScheme.DARK_GRAY_COLOR),
+		BorderFactory.createLineBorder(ColorScheme.DARKER_GRAY_COLOR));
 
 	private static final int H_GAP_BTN = 4;
 
@@ -103,6 +105,7 @@ public class InventorySetupsStandardPanel extends InventorySetupsPanel
 	private final JLabel highlightIndicator = new JLabel();
 	private final JLabel viewSetupLabel = new JLabel();
 	private final JLabel exportLabel = new JLabel();
+	private final JLabel withdrawLabel = new JLabel();
 	private final JLabel deleteLabel = new JLabel();
 
 	private final FlatTextField nameInput = new FlatTextField();
@@ -498,6 +501,32 @@ public class InventorySetupsStandardPanel extends InventorySetupsPanel
 			}
 		});
 
+		withdrawLabel.setToolTipText("Withdraw setup");
+		withdrawLabel.setIcon(EXPORT_ICON);
+		withdrawLabel.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent mouseEvent)
+			{
+				if (SwingUtilities.isLeftMouseButton(mouseEvent))
+				{
+					plugin.withdrawSetup(inventorySetup);
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent mouseEvent)
+			{
+				withdrawLabel.setIcon(EXPORT_HOVER_ICON);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent mouseEvent)
+			{
+				withdrawLabel.setIcon(EXPORT_ICON);
+			}
+		});
+
 		deleteLabel.setToolTipText("Delete setup");
 		deleteLabel.setIcon(DELETE_ICON);
 		deleteLabel.addMouseListener(new MouseAdapter()
@@ -529,6 +558,7 @@ public class InventorySetupsStandardPanel extends InventorySetupsPanel
 
 		rightActions.add(viewSetupLabel);
 		rightActions.add(exportLabel);
+		rightActions.add(withdrawLabel);
 		rightActions.add(deleteLabel);
 
 		bottomContainer.add(leftActions, BorderLayout.WEST);
@@ -587,10 +617,10 @@ public class InventorySetupsStandardPanel extends InventorySetupsPanel
 	{
 
 		RuneliteColorPicker colorPicker = plugin.getColorPickerManager().create(
-				SwingUtilities.windowForComponent(this),
-				inventorySetup.getHighlightColor(),
-				inventorySetup.getName(),
-				false);
+			SwingUtilities.windowForComponent(this),
+			inventorySetup.getHighlightColor(),
+			inventorySetup.getName(),
+			false);
 
 		colorPicker.setLocation(getLocationOnScreen());
 		colorPicker.setOnColorChange(c ->
