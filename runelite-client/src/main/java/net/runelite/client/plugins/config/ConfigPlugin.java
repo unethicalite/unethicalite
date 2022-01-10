@@ -32,7 +32,6 @@ import net.runelite.api.MenuAction;
 import net.runelite.client.config.ChatColorConfig;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.RuneLiteConfig;
-import net.runelite.client.config.UnethicalConfig;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.OverlayMenuClicked;
 import net.runelite.client.plugins.Plugin;
@@ -65,9 +64,6 @@ public class ConfigPlugin extends Plugin
 	@Inject
 	private ChatColorConfig chatColorConfig;
 
-	@Inject
-	private UnethicalConfig unethicalConfig;
-
 	private PluginListPanel pluginListPanel;
 
 	private NavigationButton navButton;
@@ -84,10 +80,6 @@ public class ConfigPlugin extends Plugin
 			new PluginConfigurationDescriptor(
 					"Chat Color", "Recolor chat text", new String[]{"colour", "messages"},
 					chatColorConfig, configManager.getConfigDescriptor(chatColorConfig)
-			),
-			new PluginConfigurationDescriptor(
-					"Unethicalite", "Unethical configuration", new String[]{"unethical", "client", "settings", "pathfinder", "walker"},
-					unethicalConfig, configManager.getConfigDescriptor(unethicalConfig)
 			)
 		);
 		pluginListPanel.rebuildPluginList();

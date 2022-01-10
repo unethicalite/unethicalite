@@ -1,6 +1,10 @@
-package net.runelite.client.config;
+package net.runelite.client.plugins.unethicalite;
 
 import dev.hoot.api.movement.pathfinder.poh.JewelryBox;
+import net.runelite.client.config.Config;
+import net.runelite.client.config.ConfigGroup;
+import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 
 @ConfigGroup(UnethicalConfig.CONFIG_GROUP)
 public interface UnethicalConfig extends Config {
@@ -13,6 +17,14 @@ public interface UnethicalConfig extends Config {
             position = 0
     )
     String walkerSection = "Walker";
+
+    @ConfigItem(
+            keyName = "usePoh",
+            name = "Use POH",
+            description = "",
+            section = walkerSection
+    )
+    default boolean usePoh() { return false; }
 
     @ConfigItem(
             keyName = "hasMountedGlory",

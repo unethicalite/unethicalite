@@ -9,11 +9,14 @@ import dev.hoot.api.game.Worlds;
 import dev.hoot.api.items.Inventory;
 import dev.hoot.api.movement.Movement;
 import dev.hoot.api.movement.Reachable;
+import dev.hoot.api.movement.pathfinder.poh.HouseConstants;
 import dev.hoot.api.quests.Quest;
 import dev.hoot.api.widgets.Dialog;
 import dev.hoot.api.widgets.Widgets;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Item;
 import net.runelite.api.NPC;
+import net.runelite.api.ObjectID;
 import net.runelite.api.QuestState;
 import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
@@ -22,7 +25,10 @@ import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.plugins.unethicalite.UnethicalConfig;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -37,6 +43,7 @@ import java.util.stream.Collectors;
 
 import static net.runelite.api.MenuAction.WIDGET_TYPE_6;
 
+@Slf4j
 public class TransportLoader
 {
 	private static final int BUILD_DELAY_SECONDS = 5;
@@ -60,6 +67,9 @@ public class TransportLoader
 			new MagicMushtree(new WorldPoint(3676, 3755, 0), WidgetInfo.FOSSIL_MUSHROOM_SWAMP),
 			new MagicMushtree(new WorldPoint(3760, 3758, 0), WidgetInfo.FOSSIL_MUSHROOM_VALLEY)
 	);
+
+	@Inject
+	private static ConfigManager configManager;
 
 	static
 	{
@@ -102,6 +112,8 @@ public class TransportLoader
 		{
 			return List.copyOf(LAST_TRANSPORT_LIST);
 		}
+
+		UnethicalConfig config = configManager.getConfig(UnethicalConfig.class);
 
 		lastBuild = Instant.now();
 		List<Transport> transports = new ArrayList<>(loadStaticTransports());
@@ -356,6 +368,18 @@ public class TransportLoader
 				1164,
 				"Well that is a risk I will have to take."));
 
+		if (config.usePoh())
+		{
+			WorldPoint source = TileObjects.getNearest(ObjectID.PORTAL_4525) == null ? HouseConstants.HOUSE_POINT : Players.getLocal().getWorldLocation();
+			if (config.hasMountedGlory())
+			{
+				transports.add(mountedPohTransport(source, new WorldPoint(3087, 3496, 0), ObjectID.AMULET_OF_GLORY, "Edgeville"));
+				transports.add(mountedPohTransport(source,  new WorldPoint(2918, 3176, 0), ObjectID.AMULET_OF_GLORY, "Karamja"));
+				transports.add(mountedPohTransport(source,  new WorldPoint(3105, 3251, 0), ObjectID.AMULET_OF_GLORY, "Draynor Village"));
+				transports.add(mountedPohTransport(source,  new WorldPoint(3293, 3163, 0), ObjectID.AMULET_OF_GLORY, "Al Kharid"));
+			}
+		}
+
 		return List.copyOf(LAST_TRANSPORT_LIST = transports);
 	}
 
@@ -566,6 +590,57 @@ public class TransportLoader
 			if (transport != null)
 			{
 				transport.interact(action);
+			}
+		}, action);
+	}
+
+//	public static Transport pohTransport(
+//			WorldPoint source,
+//			WorldPoint destination,
+//			int objId,
+//			String action,
+//			String... chatOptions
+//	)
+//	{
+//		return new Transport(source, destination, Integer.MAX_VALUE, 0, () ->
+//		{
+//			if (Dialog.isViewingOptions())
+//			{
+//				if (Dialog.canContinue())
+//				{
+//					Dialog.continueSpace();
+//					return;
+//				}
+//
+//				if (Dialog.chooseOption(chatOptions))
+//				{
+//					return;
+//				}
+//
+//				return;
+//			}
+//
+//			TileObject transport = TileObjects.getFirstSurrounding(source, 5, objId);
+//			if (transport != null)
+//			{
+//				transport.interact(action);
+//			}
+//		}, action);
+//	}
+
+	public static Transport mountedPohTransport(
+			WorldPoint source,
+			WorldPoint destination,
+			int objId,
+			String action
+	)
+	{
+		return new Transport(source, destination, Integer.MAX_VALUE, 0, () ->
+		{
+			TileObject first = TileObjects.getNearest(source, objId);
+			if (first != null)
+			{
+				first.interact(action);
 			}
 		}, action);
 	}

@@ -1,6 +1,7 @@
 package dev.hoot.api.movement.pathfinder;
 
 import dev.hoot.api.entities.Players;
+import dev.hoot.api.entities.TileObjects;
 import dev.hoot.api.game.Game;
 import dev.hoot.api.game.GameThread;
 import dev.hoot.api.game.Worlds;
@@ -10,15 +11,21 @@ import dev.hoot.api.items.Inventory;
 import dev.hoot.api.magic.Magic;
 import dev.hoot.api.widgets.Dialog;
 import dev.hoot.api.widgets.Widgets;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Item;
+import net.runelite.api.ObjectID;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.plugins.unethicalite.UnethicalConfig;
 
+import javax.inject.Inject;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 public class TeleportLoader
 {
 	private static final int BUILD_DELAY_SECONDS = 5;
@@ -37,12 +44,17 @@ public class TeleportLoader
 	private static final int[] DRAKANS_MEDALLION = new int[]{22400};
 	private static final int[] SKILLS_NECKLACE = new int[]{11105, 11111, 11109, 11107, 11970, 11968};
 
+	@Inject
+	private static ConfigManager configManager;
+
 	public static List<Teleport> buildTeleports()
 	{
 		if (lastBuild.plusSeconds(BUILD_DELAY_SECONDS).isAfter(Instant.now()))
 		{
 			return LAST_TELEPORT_LIST;
 		}
+
+		UnethicalConfig config = configManager.getConfig(UnethicalConfig.class);
 
 		lastBuild = Instant.now();
 
@@ -196,10 +208,22 @@ public class TeleportLoader
 				{
 					continue;
 				}
-
-				if (teleportSpell.getPoint().distanceTo(Players.getLocal().getWorldLocation()) > 50)
+				WorldPoint dest = teleportSpell.getPoint();
+				if (teleportSpell == TeleportSpell.HOUSE_TELEPORT)
 				{
-					teleports.add(new Teleport(teleportSpell.getPoint(), 5, () ->
+					if (!config.usePoh())
+					{
+						continue;
+					}
+					if (TileObjects.getNearest(ObjectID.PORTAL_4525) != null)
+					{
+						dest = Players.getLocal().getWorldLocation();
+					}
+				}
+
+				if (dest.distanceTo(Players.getLocal().getWorldLocation()) > 50)
+				{
+					teleports.add(new Teleport(dest, 5, () ->
 					{
 						if (teleportSpell == TeleportSpell.HOME_TELEPORT_REGULAR
 								&& Players.getLocal().isAnimating())

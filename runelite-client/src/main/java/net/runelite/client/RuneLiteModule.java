@@ -57,6 +57,8 @@ import dev.hoot.api.game.Prices;
 import dev.hoot.api.game.Worlds;
 import dev.hoot.api.movement.pathfinder.GlobalCollisionMap;
 import dev.hoot.api.movement.pathfinder.RegionManager;
+import dev.hoot.api.movement.pathfinder.TeleportLoader;
+import dev.hoot.api.movement.pathfinder.TransportLoader;
 import dev.hoot.api.movement.pathfinder.Walker;
 import lombok.AllArgsConstructor;
 import net.runelite.api.Client;
@@ -67,7 +69,6 @@ import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.config.ChatColorConfig;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.RuneLiteConfig;
-import net.runelite.client.config.UnethicalConfig;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.menus.MenuManager;
@@ -128,7 +129,9 @@ public class RuneLiteModule extends AbstractModule
 				GameThread.class,
 				Game.class,
 				Prices.class,
-				Worlds.class
+				Worlds.class,
+				TeleportLoader.class,
+				TransportLoader.class
 		);
 	}
 
@@ -158,13 +161,6 @@ public class RuneLiteModule extends AbstractModule
 	ChatColorConfig provideChatColorConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(ChatColorConfig.class);
-	}
-
-	@Provides
-	@Singleton
-	UnethicalConfig provideUnethicalConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(UnethicalConfig.class);
 	}
 
 	@Provides

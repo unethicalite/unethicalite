@@ -7,6 +7,7 @@ import dev.hoot.api.magic.Magic;
 import dev.hoot.api.magic.Regular;
 import dev.hoot.api.magic.Rune;
 import dev.hoot.api.magic.Spell;
+import dev.hoot.api.movement.pathfinder.poh.HouseConstants;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
 
@@ -39,6 +40,16 @@ public enum TeleportSpell
 			"Lumbridge Teleport",
 			new RuneRequirement(1, Rune.LAW),
 			new RuneRequirement(3, Rune.AIR),
+			new RuneRequirement(1, Rune.EARTH)),
+	HOUSE_TELEPORT(
+			Magic.SpellBook.REGULAR,
+			Regular.TELEPORT_TO_HOUSE,
+			40,
+			HouseConstants.HOUSE_POINT,
+			true,
+			"Teleport to House",
+			new RuneRequirement(1, Rune.LAW),
+			new RuneRequirement(1, Rune.AIR),
 			new RuneRequirement(1, Rune.EARTH)),
 	FALADOR_TELEPORT(
 			Magic.SpellBook.REGULAR,
