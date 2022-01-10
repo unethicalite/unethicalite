@@ -12,6 +12,7 @@ import dev.hoot.api.magic.Magic;
 import dev.hoot.api.widgets.Dialog;
 import dev.hoot.api.widgets.Widgets;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.GameState;
 import net.runelite.api.Item;
 import net.runelite.api.ObjectID;
 import net.runelite.api.coords.WorldPoint;
@@ -225,8 +226,7 @@ public class TeleportLoader
 				{
 					teleports.add(new Teleport(dest, 5, () ->
 					{
-						if (teleportSpell == TeleportSpell.HOME_TELEPORT_REGULAR
-								&& Players.getLocal().isAnimating())
+						if (!Players.getLocal().isIdle() || Game.getClient().getGameState() == GameState.LOADING)
 						{
 							return;
 						}

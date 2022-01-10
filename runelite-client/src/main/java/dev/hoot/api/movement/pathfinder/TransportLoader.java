@@ -3,9 +3,11 @@ package dev.hoot.api.movement.pathfinder;
 import dev.hoot.api.entities.NPCs;
 import dev.hoot.api.entities.Players;
 import dev.hoot.api.entities.TileObjects;
+import dev.hoot.api.game.Game;
 import dev.hoot.api.game.Skills;
 import dev.hoot.api.game.Vars;
 import dev.hoot.api.game.Worlds;
+import dev.hoot.api.input.Keyboard;
 import dev.hoot.api.items.Inventory;
 import dev.hoot.api.movement.Movement;
 import dev.hoot.api.movement.Reachable;
@@ -14,6 +16,7 @@ import dev.hoot.api.quests.Quest;
 import dev.hoot.api.widgets.Dialog;
 import dev.hoot.api.widgets.Widgets;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.GameState;
 import net.runelite.api.Item;
 import net.runelite.api.NPC;
 import net.runelite.api.ObjectID;
@@ -24,6 +27,7 @@ import net.runelite.api.coords.Direction;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.unethicalite.UnethicalConfig;
@@ -371,12 +375,55 @@ public class TransportLoader
 		if (config.usePoh())
 		{
 			WorldPoint source = TileObjects.getNearest(ObjectID.PORTAL_4525) == null ? HouseConstants.HOUSE_POINT : Players.getLocal().getWorldLocation();
+
 			if (config.hasMountedGlory())
 			{
 				transports.add(mountedPohTransport(source, new WorldPoint(3087, 3496, 0), ObjectID.AMULET_OF_GLORY, "Edgeville"));
 				transports.add(mountedPohTransport(source,  new WorldPoint(2918, 3176, 0), ObjectID.AMULET_OF_GLORY, "Karamja"));
 				transports.add(mountedPohTransport(source,  new WorldPoint(3105, 3251, 0), ObjectID.AMULET_OF_GLORY, "Draynor Village"));
 				transports.add(mountedPohTransport(source,  new WorldPoint(3293, 3163, 0), ObjectID.AMULET_OF_GLORY, "Al Kharid"));
+			}
+
+			if (config.hasMountedDigsitePendant())
+			{
+				transports.add(pohDigsitePendantTransport(source, new WorldPoint(3341, 3445, 0), 1));
+				transports.add(pohDigsitePendantTransport(source, new WorldPoint(3766, 3870, 1), 2));
+				transports.add(pohDigsitePendantTransport(source, new WorldPoint(3549, 10456, 0), 3));
+			}
+
+			switch (config.hasJewelryBox())
+			{
+				case ORNATE:
+					transports.add(pohWidgetTransport(source, new WorldPoint(2538, 3863, 0), 'j'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3163, 3478, 0), 'k'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2996, 3375, 0), 'l'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2828, 10166, 0), 'm'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3087, 3496, 0), 'n'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2918, 3176, 0), 'o'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3105, 3251, 0), 'p'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3293, 3163, 0), 'q'));
+				case FANCY:
+					transports.add(pohWidgetTransport(source, new WorldPoint(2882, 3548, 0), '9'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3191, 3367, 0), 'a'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3052, 3488, 0), 'b'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2655, 3441, 0), 'c'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2611, 3390, 0), 'd'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3050, 9763, 0), 'e'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2933, 3295, 0), 'f'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3143, 3440, 0), 'g'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(1662, 3505, 0), 'h'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(1249, 3718, 0), 'i'));
+				case BASIC:
+					transports.add(pohWidgetTransport(source, new WorldPoint(3315, 3235, 0), '1'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2440, 3090, 0), '2'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3151, 3635, 0), '3'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2898, 3553, 0), '4'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2520, 3571, 0), '5'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(2964, 4382, 2), '6'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(3244, 9501, 2), '7'));
+					transports.add(pohWidgetTransport(source, new WorldPoint(1624, 3938, 0), '8'));
+					break;
+				default:
 			}
 		}
 
@@ -594,39 +641,60 @@ public class TransportLoader
 		}, action);
 	}
 
-//	public static Transport pohTransport(
-//			WorldPoint source,
-//			WorldPoint destination,
-//			int objId,
-//			String action,
-//			String... chatOptions
-//	)
-//	{
-//		return new Transport(source, destination, Integer.MAX_VALUE, 0, () ->
-//		{
-//			if (Dialog.isViewingOptions())
-//			{
-//				if (Dialog.canContinue())
-//				{
-//					Dialog.continueSpace();
-//					return;
-//				}
-//
-//				if (Dialog.chooseOption(chatOptions))
-//				{
-//					return;
-//				}
-//
-//				return;
-//			}
-//
-//			TileObject transport = TileObjects.getFirstSurrounding(source, 5, objId);
-//			if (transport != null)
-//			{
-//				transport.interact(action);
-//			}
-//		}, action);
-//	}
+	public static Transport pohDigsitePendantTransport(
+			WorldPoint source,
+			WorldPoint destination,
+			int action
+	)
+	{
+		return new Transport(source, destination, Integer.MAX_VALUE, 0, () ->
+		{
+			if (Players.getLocal().isAnimating())
+			{
+				return;
+			}
+
+			if (Widgets.isVisible(Widgets.get(WidgetInfo.ADVENTURE_LOG)))
+			{
+				Keyboard.type(action);
+				return;
+			}
+
+			TileObject digsitePendant = TileObjects.getNearest("Digsite Pendant");
+			if (digsitePendant != null)
+			{
+				digsitePendant.interact("Teleport menu");
+			}
+		}, "");
+	}
+
+
+	public static Transport pohWidgetTransport(
+			WorldPoint source,
+			WorldPoint destination,
+			char action
+	)
+	{
+		return new Transport(source, destination, Integer.MAX_VALUE, 0, () ->
+		{
+			if (!Players.getLocal().isIdle() || Game.getClient().getGameState() == GameState.LOADING)
+			{
+				return;
+			}
+
+			if (Widgets.isVisible(Widgets.get(WidgetID.JEWELLERY_BOX_GROUP_ID, 0)))
+			{
+				Keyboard.type(action);
+				return;
+			}
+
+			TileObject box = TileObjects.getNearest(to -> to.getName() != null && to.getName().contains("Jewellery Box"));
+			if (box != null)
+			{
+				box.interact("Teleport Menu");
+			}
+		}, String.valueOf(action));
+	}
 
 	public static Transport mountedPohTransport(
 			WorldPoint source,
