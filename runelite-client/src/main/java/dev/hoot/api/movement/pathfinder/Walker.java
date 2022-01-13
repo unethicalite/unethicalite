@@ -341,9 +341,9 @@ public class Walker
 
 		for (Transport transport : TransportLoader.buildTransports())
 		{
-			if (local.getWorldLocation().distanceTo(transport.getDestination()) > transport.getSource().distanceTo(local.getWorldLocation()) + transport.getDestinationRadius()) {
+//			if (local.getWorldLocation().distanceTo(transport.getDestination()) > transport.getSource().distanceTo(local.getWorldLocation()) + transport.getDestinationRadius()) {
 				out.computeIfAbsent(transport.getSource(), x -> new ArrayList<>()).add(transport);
-			}
+//			}
 		}
 
 		return out;

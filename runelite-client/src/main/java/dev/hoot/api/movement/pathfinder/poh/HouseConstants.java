@@ -4,6 +4,6 @@ import net.runelite.api.coords.WorldPoint;
 
 public class HouseConstants {
 
-    public static WorldPoint HOUSE_POINT = new WorldPoint(4000, 4000, 3);
+    public static WorldPoint HOUSE_POINT = new WorldPoint(10000, 4000, 1);
 
 }
