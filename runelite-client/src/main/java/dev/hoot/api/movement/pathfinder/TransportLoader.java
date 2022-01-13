@@ -1,5 +1,7 @@
 package dev.hoot.api.movement.pathfinder;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dev.hoot.api.entities.NPCs;
 import dev.hoot.api.entities.Players;
 import dev.hoot.api.entities.TileObjects;
@@ -17,6 +19,7 @@ import dev.hoot.api.widgets.Dialog;
 import dev.hoot.api.widgets.Widgets;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.GameState;
+import lombok.Value;
 import net.runelite.api.Item;
 import net.runelite.api.NPC;
 import net.runelite.api.ObjectID;
@@ -50,10 +53,8 @@ import static net.runelite.api.MenuAction.WIDGET_TYPE_6;
 @Slf4j
 public class TransportLoader
 {
-//	private static final int BUILD_DELAY_SECONDS = 5;
-//	private static Instant lastBuild = Instant.now().minusSeconds(6);
+	private static final Gson GSON = new GsonBuilder().create();
 	private static final List<Transport> STATIC_TRANSPORTS = new ArrayList<>();
-//	private static List<Transport> LAST_TRANSPORT_LIST = Collections.emptyList();
 
 	private static final WorldArea MLM = new WorldArea(3714, 5633, 60, 62, 0);
 
@@ -90,16 +91,11 @@ public class TransportLoader
 
 		try (InputStream txt = new URL(RegionManager.API_URL + "/transports").openStream())
 		{
-			String[] lines = new String(txt.readAllBytes()).split("\n");
-			for (String l : lines)
-			{
-				String line = l.trim();
-				if (line.startsWith("#") || line.isEmpty())
-				{
-					continue;
-				}
+			TransportDto[] json = GSON.fromJson(new String(txt.readAllBytes()), TransportDto[].class);
 
-				STATIC_TRANSPORTS.add(parseTransportLine(line));
+			for (TransportDto transportDto : json)
+			{
+				STATIC_TRANSPORTS.add(transportDto.toModel());
 			}
 		}
 		catch (IOException e)
@@ -786,6 +782,27 @@ public class TransportLoader
 		{
 			this.position = position;
 			this.location = location;
+		}
+	}
+
+	@Value
+	private static class TransportDto
+	{
+		int objId;
+		String objName;
+		String source;
+		String destination;
+		String action;
+
+		private Transport toModel()
+		{
+			return objectTransport(stringToWorldPoint(source), stringToWorldPoint(destination), objId, action);
+		}
+
+		private static WorldPoint stringToWorldPoint(String text)
+		{
+			Integer[] points = Arrays.stream(text.split(" ")).map(Integer::parseInt).toArray(Integer[]::new);
+			return new WorldPoint(points[0], points[1], points[2]);
 		}
 	}
 }
