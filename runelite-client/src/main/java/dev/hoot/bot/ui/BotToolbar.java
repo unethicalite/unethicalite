@@ -1,8 +1,6 @@
 package dev.hoot.bot.ui;
 
-import dev.hoot.bot.Bot;
 import dev.hoot.bot.config.BotConfig;
-import dev.hoot.bot.config.BotConfigManager;
 import dev.hoot.bot.config.ConfigPanel;
 import dev.hoot.bot.config.ConfigurationDescriptor;
 import dev.hoot.bot.devtools.EntityRenderer;
@@ -10,8 +8,11 @@ import dev.hoot.bot.devtools.scriptinspector.ScriptInspector;
 import dev.hoot.bot.devtools.varinspector.VarInspector;
 import dev.hoot.bot.devtools.widgetinspector.WidgetInspector;
 import dev.hoot.bot.managers.ScriptManager;
+import dev.hoot.bot.managers.interaction.InteractionConfig;
 import dev.hoot.bot.script.events.ScriptChanged;
 import dev.hoot.bot.script.events.ScriptState;
+import net.runelite.api.Client;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.RuneLiteConfig;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -30,10 +31,12 @@ public class BotToolbar extends JMenuBar
 	private final EntityRenderer entityRenderer;
 	private final ScriptManager scriptManager;
 	private final ScriptPanel scriptPanel;
-	private final BotConfigManager configManager;
+	private final ConfigManager configManager;
 	private final EventBus eventBus;
 	private final BotConfig botConfig;
+	private final InteractionConfig interactConfig;
 	private final RuneLiteConfig runeLiteConfig;
+	private final Client client;
 
 	private JMenuItem stopScript;
 	private JMenuItem pauseScript;
@@ -41,12 +44,14 @@ public class BotToolbar extends JMenuBar
 	private JRadioButton rendering;
 
 	private ConfigPanel botConfigPanel;
+	private ConfigPanel interactConfigPanel;
 	private ConfigPanel clientConfigPanel;
 
 	@Inject
 	public BotToolbar(VarInspector varInspector, WidgetInspector widgetInspector, ScriptInspector scriptInspector,
 					  EntityRenderer entityRenderer, ScriptManager scriptManager, ScriptPanel scriptPanel,
-					  BotConfigManager configManager, EventBus eventBus, BotConfig botConfig, RuneLiteConfig runeLiteConfig)
+					  ConfigManager configManager, EventBus eventBus, BotConfig botConfig, InteractionConfig interactConfig,
+					  RuneLiteConfig runeLiteConfig, Client client)
 	{
 		this.varInspector = varInspector;
 		this.widgetInspector = widgetInspector;
@@ -57,12 +62,15 @@ public class BotToolbar extends JMenuBar
 		this.configManager = configManager;
 		this.eventBus = eventBus;
 		this.botConfig = botConfig;
+		this.interactConfig = interactConfig;
 		this.runeLiteConfig = runeLiteConfig;
+		this.client = client;
 	}
 
 	public void init()
 	{
 		configManager.setDefaultConfiguration(botConfig, false);
+		configManager.setDefaultConfiguration(interactConfig, false);
 		configManager.setDefaultConfiguration(runeLiteConfig, false);
 
 		ConfigurationDescriptor bot = new ConfigurationDescriptor(
@@ -70,15 +78,23 @@ public class BotToolbar extends JMenuBar
 				"Bot settings",
 				configManager.getConfigDescriptor(botConfig)
 		);
-		botConfigPanel = new ConfigPanel(configManager, eventBus, bot);
+		botConfigPanel = new ConfigPanel(configManager, eventBus, bot, client);
 		botConfigPanel.init();
+
+		ConfigurationDescriptor interact = new ConfigurationDescriptor(
+				"Interact",
+				"Interact settings",
+				configManager.getConfigDescriptor(interactConfig)
+		);
+		interactConfigPanel = new ConfigPanel(configManager, eventBus, interact, client);
+		interactConfigPanel.init();
 
 		ConfigurationDescriptor cl = new ConfigurationDescriptor(
 				"Client",
 				"Client settings",
 				configManager.getConfigDescriptor(runeLiteConfig)
 		);
-		clientConfigPanel = new ConfigPanel(configManager, eventBus, cl);
+		clientConfigPanel = new ConfigPanel(configManager, eventBus, cl, client);
 		clientConfigPanel.init();
 
 		SwingUtilities.invokeLater(() ->
@@ -91,21 +107,28 @@ public class BotToolbar extends JMenuBar
 			scripts.setMaximumSize(scripts.getPreferredSize());
 			add(scripts);
 
-			JMenuItem settings = new JMenuItem("Bot Settings");
-			settings.addActionListener(e ->
+			JMenu settingsMenu = new JMenu("Settings");
+			JMenuItem botSettings = new JMenuItem("Bot Settings");
+			botSettings.addActionListener(e ->
 			{
 				botConfigPanel.open();
 			});
-			settings.setMaximumSize(settings.getPreferredSize());
-			add(settings);
+			settingsMenu.add(botSettings);
+
+			JMenuItem interactSettings = new JMenuItem("Interact Settings");
+			interactSettings.addActionListener(e ->
+			{
+				interactConfigPanel.open();
+			});
+			settingsMenu.add(interactSettings);
 
 			JMenuItem clientSettings = new JMenuItem("Client Settings");
 			clientSettings.addActionListener(e ->
 			{
 				clientConfigPanel.open();
 			});
-			clientSettings.setMaximumSize(clientSettings.getPreferredSize());
-			add(clientSettings);
+			settingsMenu.add(clientSettings);
+			add(settingsMenu);
 
 			rendering = new JRadioButton("Toggle rendering");
 			rendering.addActionListener(e -> configManager.setConfiguration("hoot", "renderOff", rendering.isSelected()));
@@ -114,15 +137,15 @@ public class BotToolbar extends JMenuBar
 			add(rendering);
 
 			JRadioButton mouseDebug = new JRadioButton("Mouse debug");
-			mouseDebug.addActionListener(e -> Bot.debugMouse = mouseDebug.isSelected());
+			mouseDebug.addActionListener(e -> configManager.setConfiguration("interaction", "drawMouse", mouseDebug.isSelected()));
 			debug.add(mouseDebug);
 
 			JRadioButton menuActionDebug = new JRadioButton("MenuAction debug");
-			menuActionDebug.addActionListener(e -> Bot.debugMenuAction = menuActionDebug.isSelected());
+			menuActionDebug.addActionListener(e -> configManager.setConfiguration("interaction", "debugInteractions", menuActionDebug.isSelected()));
 			debug.add(menuActionDebug);
 
 			JRadioButton dialogDebug = new JRadioButton("Dialog debug");
-			dialogDebug.addActionListener(e -> Bot.debugDialogs = dialogDebug.isSelected());
+			dialogDebug.addActionListener(e -> configManager.setConfiguration("interaction", "debugDialogs", dialogDebug.isSelected()));
 			debug.add(dialogDebug);
 
 			JRadioButton collisionDebug = new JRadioButton("Collision map");

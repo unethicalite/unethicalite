@@ -1,4 +1,4 @@
-package net.runelite.client.plugins.interaction;
+package dev.hoot.bot.managers.interaction;
 
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
@@ -11,19 +11,18 @@ public interface InteractionConfig extends Config
 	@ConfigSection(
 			name = "Interaction manager",
 			description = "Interaction settings",
-			closedByDefault = true,
-			position = 3
+			position = 0
 	)
 	String interactionManager = "Interaction manager";
 
 	@ConfigItem(
-			keyName = "mouseEvents",
-			name = "Mouse events",
-			description = "Sends mouse events before interaction",
+			keyName = "clickSwap",
+			name = "Click-swap",
+			description = "Swaps the menuaction after clicking (may be slower)",
 			section = interactionManager,
-			position = 0
+			position = 1
 	)
-	default boolean mouseEvents()
+	default boolean clickSwap()
 	{
 		return false;
 	}
@@ -33,7 +32,7 @@ public interface InteractionConfig extends Config
 			name = "Interact click type",
 			description = "Type of clicks to send to the server",
 			section = interactionManager,
-			position = 0
+			position = 3
 	)
 	default InteractType interactType()
 	{
@@ -45,7 +44,7 @@ public interface InteractionConfig extends Config
 			name = "Draw mouse events",
 			description = "Draws the sent mouse events on screen",
 			section = interactionManager,
-			position = 1
+			position = 4
 	)
 	default boolean drawMouse()
 	{
@@ -57,7 +56,7 @@ public interface InteractionConfig extends Config
 			name = "Debug interactions",
 			description = "Prints interactions to console",
 			section = interactionManager,
-			position = 2
+			position = 5
 	)
 	default boolean debugInteractions()
 	{
@@ -69,7 +68,7 @@ public interface InteractionConfig extends Config
 			name = "Debug dialogs",
 			description = "Prints dialog actions to console",
 			section = interactionManager,
-			position = 3
+			position = 6
 	)
 	default boolean debugDialogs()
 	{

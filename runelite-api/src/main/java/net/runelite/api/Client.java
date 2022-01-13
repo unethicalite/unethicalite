@@ -2364,7 +2364,14 @@ public interface Client extends GameEngine
 		interact(identifier, opcode, param0, param1, -1, -1);
 	}
 
-	void interact(final int identifier, final int opcode, final int param0, final int param1, int clickX, int clickY);
+	default void interact(final int identifier, final int opcode, final int param0, final int param1,
+						  int clickX, int clickY)
+	{
+		interact(identifier, opcode, param0, param1, clickX, clickY, -1337);
+	}
+
+	void interact(final int identifier, final int opcode, final int param0, final int param1, int clickX, int clickY,
+				  long entityTag);
 
 	int getMouseLastPressedX();
 
@@ -2461,4 +2468,26 @@ public interface Client extends GameEngine
 	ClientPacket createClientPacket(int opcode, int length);
 
 	String getPassword();
+
+	long[] getEntitiesAtMouse();
+
+	int getEntitiesAtMouseCount();
+
+	void setEntitiesAtMouseCount(int count);
+
+	long calculateTag(int var0, int var1, int var2, boolean var3, int var4);
+
+	String[] getMenuOptions();
+
+	String[] getMenuTargets();
+
+	int[] getMenuIdentifiers();
+
+	int[] getMenuOpcodes();
+
+	int[] getMenuArguments1();
+
+	int[] getMenuArguments2();
+
+	void setMenuOpen(boolean open);
 }

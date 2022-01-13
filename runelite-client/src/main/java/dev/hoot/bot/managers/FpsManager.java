@@ -1,6 +1,9 @@
-package dev.hoot.bot.devtools;
+package dev.hoot.bot.managers;
 
-public class FpsDrawListener implements Runnable
+import javax.inject.Singleton;
+
+@Singleton
+public class FpsManager implements Runnable
 {
 	private static final int SAMPLE_SIZE = 4;
 

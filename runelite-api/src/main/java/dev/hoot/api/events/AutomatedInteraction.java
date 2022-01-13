@@ -14,4 +14,5 @@ public class AutomatedInteraction
 	int param1;
 	int clickX;
 	int clickY;
+	long entityTag;
 }

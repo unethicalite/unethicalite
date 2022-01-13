@@ -1,4 +1,4 @@
-package net.runelite.client.plugins.interaction;
+package dev.hoot.bot.managers.interaction;
 
 import dev.hoot.api.MouseHandler;
 import dev.hoot.api.commons.Rand;
@@ -16,8 +16,7 @@ import net.runelite.client.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 
 @Singleton
 @Slf4j
@@ -44,14 +43,17 @@ public class InteractionManager
 				+ " | ID=" + e.getIdentifier()
 				+ " | OP=" + e.getOpcode()
 				+ " | P0=" + e.getParam0()
-				+ " | P1=" + e.getParam1();
+				+ " | P1=" + e.getParam1()
+				+ " | TAG=" + e.getEntityTag();
 
 		if (config.debugInteractions())
 		{
-			log.info("[Bot Action] {}", debug);
+			log.info("[Automated] {}", debug);
 		}
 
-		if (config.mouseEvents())
+		MouseHandler mouseHandler = client.getMouseHandler();
+
+		if (config.clickSwap())
 		{
 			if (!interactReady())
 			{
@@ -69,17 +71,16 @@ public class InteractionManager
 
 			action = e;
 
-			Mouse.click(mouseClickX, mouseClickY, true);
+			mouseHandler.sendClick(mouseClickX, mouseClickY);
 		}
 		else
 		{
 			// Spoof mouse
-			MouseHandler mouseHandler = client.getMouseHandler();
 			Point randomPoint = getClickPoint(e);
 			mouseClickX = randomPoint.x;
 			mouseClickY = randomPoint.y;
 			mouseHandler.sendMovement(mouseClickX, mouseClickY);
-			mouseHandler.sendClick(mouseClickX, mouseClickY);
+			mouseHandler.sendClick(mouseClickX, mouseClickY, 1337);
 			processAction(e, mouseClickX, mouseClickY);
 		}
 	}
@@ -87,17 +88,20 @@ public class InteractionManager
 	@Subscribe
 	public void onMenuOptionClicked(MenuOptionClicked e)
 	{
-		if (config.mouseEvents() && e.getCanvasX() == mouseClickX && e.getCanvasY() == mouseClickY)
+		if (config.clickSwap() && e.getCanvasX() == mouseClickX && e.getCanvasY() == mouseClickY)
 		{
-			e.consume();
-
 			if (action == null)
 			{
 				log.error("Menu replace failed");
 				return;
 			}
 
-			processAction(action, mouseClickX, mouseClickY);
+			e.setMenuOption(action.getOption());
+			e.setMenuTarget(action.getTarget());
+			e.setId(action.getIdentifier());
+			e.setMenuAction(action.getOpcode());
+			e.setParam0(action.getParam0());
+			e.setParam1(action.getParam1());
 			reset();
 			return;
 		}
@@ -110,7 +114,7 @@ public class InteractionManager
 					+ " | OP=" + e.getMenuAction().getId()
 					+ " | P0=" + e.getParam0()
 					+ " | P1=" + e.getParam1();
-			log.info("[Manual Action] {}", action);
+			log.info("[Menu Action] {}", action);
 		}
 
 		reset();
@@ -152,7 +156,7 @@ public class InteractionManager
 	{
 		if (config.interactType() == InteractType.OFF_SCREEN)
 		{
-			return new Point(0, 0);
+			return new Point(5, 5);
 		}
 
 		if (config.interactType() == InteractType.MOUSE_POS)
