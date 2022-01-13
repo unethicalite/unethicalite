@@ -337,9 +337,13 @@ public class Walker
 	public static Map<WorldPoint, List<Transport>> buildTransportLinks()
 	{
 		Map<WorldPoint, List<Transport>> out = new HashMap<>();
+		Player local = Players.getLocal();
+
 		for (Transport transport : TransportLoader.buildTransports())
 		{
-			out.computeIfAbsent(transport.getSource(), x -> new ArrayList<>()).add(transport);
+			if (local.getWorldLocation().distanceTo(transport.getDestination()) > transport.getSource().distanceTo(local.getWorldLocation()) + transport.getDestinationRadius()) {
+				out.computeIfAbsent(transport.getSource(), x -> new ArrayList<>()).add(transport);
+			}
 		}
 
 		return out;
