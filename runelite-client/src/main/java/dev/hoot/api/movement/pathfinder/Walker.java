@@ -117,7 +117,7 @@ public class Walker
 		}
 
 		// Refresh path if our direction changed
-		if (!local.isAnimating() && !path.contains(local.getWorldLocation()))
+		if (!local.isAnimating() && path.stream().noneMatch(wp -> wp.distanceTo(local.getWorldLocation()) < 10))
 		{
 			log.debug("Direction changed, resetting cached path towards {}", destination);
 			LOCAL_PATH_CACHE.refresh(destination);
