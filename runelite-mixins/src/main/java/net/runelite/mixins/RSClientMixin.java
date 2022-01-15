@@ -1236,23 +1236,23 @@ public abstract class RSClientMixin implements RSClient
 
 //	@FieldHook("experience")
 //	@Inject
-//	public static void experiencedChanged(int idx)
-//	{
-//		Skill[] possibleSkills = Skill.values();
-//
-//		// We subtract one here because 'Overall' isn't considered a skill that's updated.
-//		if (idx < possibleSkills.length - 1)
-//		{
-//			Skill updatedSkill = possibleSkills[idx];
-//			StatChanged statChanged = new StatChanged(
-//				updatedSkill,
-//				client.getSkillExperience(updatedSkill),
-//				client.getRealSkillLevel(updatedSkill),
-//				client.getBoostedSkillLevel(updatedSkill)
-//			);
-//			client.getCallbacks().post(statChanged);
-//		}
-//	}
+	public static void experiencedChanged(int idx)
+	{
+		Skill[] possibleSkills = Skill.values();
+
+		// We subtract one here because 'Overall' isn't considered a skill that's updated.
+		if (idx < possibleSkills.length - 1)
+		{
+			Skill updatedSkill = possibleSkills[idx];
+			StatChanged statChanged = new StatChanged(
+				updatedSkill,
+				client.getSkillExperience(updatedSkill),
+				client.getRealSkillLevel(updatedSkill),
+				client.getBoostedSkillLevel(updatedSkill)
+			);
+			client.getCallbacks().post(statChanged);
+		}
+	}
 
 	@FieldHook("changedSkills")
 	@Inject
@@ -1614,8 +1614,8 @@ public abstract class RSClientMixin implements RSClient
 		return null;
 	}
 
-	@Copy("menuAction")
-	@Replace("menuAction")
+//	@Copy("menuAction")
+//	@Replace("menuAction")
 	static void copy$menuAction(int param0, int param1, int opcode, int id, String option, String target, int canvasX, int canvasY)
 	{
 		RSRuneLiteMenuEntry menuEntry = null;
@@ -1648,14 +1648,8 @@ public abstract class RSClientMixin implements RSClient
 		menuOptionClicked.setId(id);
 		menuOptionClicked.setParam1(param1);
 		menuOptionClicked.setSelectedItemIndex(client.getSelectedItemSlot());
-		menuOptionClicked.setCanvasX(canvasX);
-		menuOptionClicked.setCanvasY(canvasY);
 
-		// Do not forward automated interaction events to eventbus
-		if (!menuOptionClicked.isAutomated())
-		{
-			client.getCallbacks().post(menuOptionClicked);
-		}
+		client.getCallbacks().post(menuOptionClicked);
 
 		if (menuEntry != null && menuEntry.getConsumer() != null)
 		{
@@ -1670,17 +1664,17 @@ public abstract class RSClientMixin implements RSClient
 		if (printMenuActions)
 		{
 			client.getLogger().info(
-				"|MenuAction|: MenuOption={} MenuTarget={} Id={} Opcode={}/{} Param0={} Param1={} CanvasX={} CanvasY={}",
-				menuOptionClicked.getMenuOption(), menuOptionClicked.getMenuTarget(), menuOptionClicked.getId(),
-				menuOptionClicked.getMenuAction(), opcode + (decremented ? 2000 : 0),
-				menuOptionClicked.getParam0(), menuOptionClicked.getParam1(), canvasX, canvasY
+					"|MenuAction|: MenuOption={} MenuTarget={} Id={} Opcode={}/{} Param0={} Param1={} CanvasX={} CanvasY={}",
+					menuOptionClicked.getMenuOption(), menuOptionClicked.getMenuTarget(), menuOptionClicked.getId(),
+					menuOptionClicked.getMenuAction(), opcode + (decremented ? 2000 : 0),
+					menuOptionClicked.getParam0(), menuOptionClicked.getParam1(), canvasX, canvasY
 			);
 		}
 
 		copy$menuAction(menuOptionClicked.getParam0(), menuOptionClicked.getParam1(),
-			menuOptionClicked.getMenuAction() == UNKNOWN ? opcode : menuOptionClicked.getMenuAction().getId(),
-			menuOptionClicked.getId(), menuOptionClicked.getMenuOption(), menuOptionClicked.getMenuTarget(),
-			canvasX, canvasY);
+				menuOptionClicked.getMenuAction() == UNKNOWN ? opcode : menuOptionClicked.getMenuAction().getId(),
+				menuOptionClicked.getId(), menuOptionClicked.getMenuOption(), menuOptionClicked.getMenuTarget(),
+				canvasX, canvasY);
 	}
 
 	@Override
