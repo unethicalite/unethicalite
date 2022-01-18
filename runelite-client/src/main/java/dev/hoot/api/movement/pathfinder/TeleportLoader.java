@@ -240,7 +240,7 @@ public class TeleportLoader
 			}
 		}
 
-		if (config.usePoh() && TeleportSpell.HOUSE_TELEPORT.canCast())
+		if (config.usePoh() && (TeleportSpell.HOUSE_TELEPORT.canCast() || TileObjects.getNearest(ObjectID.PORTAL_4525) != null))
 		{
 				if (config.hasMountedGlory())
 				{
@@ -320,8 +320,7 @@ public class TeleportLoader
 			}
 		}
 
-		return List.copyOf(teleports);
-//		return List.copyOf(LAST_TELEPORT_LIST = teleports);
+		return List.copyOf(LAST_TELEPORT_LIST = teleports);
 	}
 
 	public static void jewelryTeleport(String target, int... ids)
