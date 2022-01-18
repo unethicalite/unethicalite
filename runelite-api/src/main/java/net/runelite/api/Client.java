@@ -191,6 +191,18 @@ public interface Client extends GameEngine
 	void stopNow();
 
 	/**
+	 * Gets the login screen world select state.
+	 *
+	 * @return the world select state
+	 */
+	boolean isWorldSelectOpen();
+
+	/**
+	 * Sets the login screen world select state.
+	 */
+	void setWorldSelectOpen(boolean open);
+
+	/**
 	 * Gets the current logged in username.
 	 *
 	 * @return the logged in username
@@ -2443,10 +2455,6 @@ public interface Client extends GameEngine
 	int getDestinationX();
 
 	int getDestinationY();
-
-	boolean isWorldSelectOpen();
-
-	void setWorldSelectOpen(boolean open);
 
 	void setWindowedMode(int mode);
 

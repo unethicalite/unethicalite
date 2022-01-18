@@ -2,12 +2,14 @@ package dev.hoot.bot.managers.interaction;
 
 import dev.hoot.api.MouseHandler;
 import dev.hoot.api.commons.Rand;
+import dev.hoot.api.commons.Time;
 import dev.hoot.api.events.AutomatedInteraction;
 import dev.hoot.api.game.GameThread;
 import dev.hoot.api.movement.Movement;
 import dev.hoot.api.widgets.DialogOption;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.Constants;
 import net.runelite.api.MenuAction;
 import net.runelite.api.events.DialogProcessed;
 import net.runelite.api.events.MenuOptionClicked;
@@ -52,6 +54,7 @@ public class InteractionManager
 			if (!interactReady())
 			{
 				log.warn("Interacting too fast, consider slowing down consecutive interactions");
+				Time.sleep(Constants.CLIENT_TICK_LENGTH);
 				return;
 			}
 
@@ -73,6 +76,7 @@ public class InteractionManager
 
 			mouseHandler.sendMovement(randomPoint.x, randomPoint.y);
 			mouseHandler.sendClick(randomPoint.x, randomPoint.y);
+			Time.sleep(Constants.CLIENT_TICK_LENGTH);
 		}
 		else
 		{
