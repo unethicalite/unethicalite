@@ -111,8 +111,9 @@ public class Walker
 		if (teleport != null)
 		{
 			log.debug("Casting teleport {}", teleport);
+			WorldPoint currentPosition = local.getWorldLocation();
 			teleport.getHandler().run();
-			Time.sleep(5000);
+			Time.sleepUntil(() -> !currentPosition.equals(local.getWorldLocation()), 5000);
 			return false;
 		}
 
@@ -348,9 +349,7 @@ public class Walker
 
 		for (Transport transport : TransportLoader.buildTransports())
 		{
-//			if (local.getWorldLocation().distanceTo(transport.getDestination()) > transport.getSource().distanceTo(local.getWorldLocation()) + transport.getDestinationRadius()) {
-				out.computeIfAbsent(transport.getSource(), x -> new ArrayList<>()).add(transport);
-//			}
+			out.computeIfAbsent(transport.getSource(), x -> new ArrayList<>()).add(transport);
 		}
 
 		return out;

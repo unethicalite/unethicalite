@@ -11,6 +11,7 @@ import net.runelite.api.Point;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.events.MenuOpened;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
@@ -18,6 +19,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 import javax.inject.Singleton;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -35,6 +37,7 @@ public class WorldWalkerPlugin extends Plugin
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private Future<?> future = null;
 
+    private Point lastMenuOpenedPoint;
     private WorldPoint mapPoint;
 
     @Override
@@ -70,10 +73,16 @@ public class WorldWalkerPlugin extends Plugin
     }
 
     @Subscribe
+    public void onMenuOpened(MenuOpened event)
+    {
+        lastMenuOpenedPoint = Game.getClient().getMouseCanvasPosition();
+    }
+
+    @Subscribe
     public void onMenuEntryAdded(MenuEntryAdded event)
     {
 
-        if (mapPoint != null)
+        if (mapPoint != null && Arrays.stream(Game.getClient().getMenuEntries()).noneMatch(menuEntry -> menuEntry.getOption().equals("<col=00ff00>Clear destination")))
         {
             Game.getClient()
                     .createMenuEntry(-2)
@@ -98,14 +107,17 @@ public class WorldWalkerPlugin extends Plugin
             return;
         }
 
-        Game.getClient()
-                .createMenuEntry(-2)
-                .setOption("<col=00ff00>Walk to")
-                .setTarget(event.getTarget())
-                .setType(MenuAction.RUNELITE)
-                .onClick(e -> {
-                    mapPoint = CoordUtils.calculateMapPoint(Game.getClient().getMouseCanvasPosition());
-                    log.debug("Walking to {}", mapPoint);
-                });
+        if (Arrays.stream(Game.getClient().getMenuEntries()).noneMatch(menuEntry -> menuEntry.getOption().equals("<col=00ff00>Walk to")))
+        {
+            Game.getClient()
+                    .createMenuEntry(-2)
+                    .setOption("<col=00ff00>Walk to")
+                    .setTarget(event.getTarget())
+                    .setType(MenuAction.RUNELITE)
+                    .onClick(e -> {
+                        mapPoint = CoordUtils.calculateMapPoint(Game.getClient().isMenuOpen() ? lastMenuOpenedPoint : Game.getClient().getMouseCanvasPosition());
+                        log.debug("Walking to {}", mapPoint);
+                    });
+        }
     }
 }
