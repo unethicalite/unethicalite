@@ -4,6 +4,8 @@ This client is slightly modified in order to be compatible with our api. Updates
 
 **All existing OpenOSRS or RuneLite plugins ARE compatible with this client.**
 
+![](assets/readme-assets/vanilla-unethicalite.png)
+
 ## Features
 
 ### Extended RuneLite API
