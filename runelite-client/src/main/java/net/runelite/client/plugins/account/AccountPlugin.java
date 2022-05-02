@@ -28,7 +28,10 @@ import java.awt.image.BufferedImage;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.inject.Inject;
 import javax.swing.JOptionPane;
+
+import dev.unethicalite.api.movement.CoolerPathfinder;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.account.AccountSession;
 import net.runelite.client.account.SessionManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -72,6 +75,12 @@ public class AccountPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
+
+        long start = System.nanoTime();
+        log.info(CoolerPathfinder.getPath(new WorldPoint(3165, 3469, 0), new WorldPoint(2540, 3348, 0)).size() + "");
+        long end = System.nanoTime();
+        log.info("Time taken: " + (end - start) / 1000000 + "ms");
+
 		loginButton = NavigationButton.builder()
 			.tab(false)
 			.icon(LOGIN_IMAGE)
