@@ -64,38 +64,32 @@ public class CoolerPathfinder {
     }
 
     public static List<WorldPoint> getPath(WorldPoint from, WorldPoint to) {
-        Set<WorldPoint> visited = new HashSet<>();
-        Map<WorldPoint, Double> dist = new HashMap<>();
         Map<WorldPoint, WorldPoint> previous = new HashMap<>();
-        PriorityQueue<WorldPoint> queue = new PriorityQueue<>(Comparator.comparingDouble(it -> distanceTo(it, to)));
+        Map<WorldPoint, Integer> gscore = new HashMap<>();
+        Map<WorldPoint, Double> fscore = new HashMap<>();
+        PriorityQueue<WorldPoint> queue = new PriorityQueue<>(Comparator.comparingDouble(fscore::get));
 
-        dist.put(from, 0.0);
+        gscore.put(from, 0);
+        fscore.put(from, distanceTo(from, to));
         queue.add(from);
 
         while (!queue.isEmpty()) {
             WorldPoint current = queue.poll();
             if (current.equals(to)) {
-                break;
+                return buildPath(from, to, previous);
             }
+
             for (WorldPoint neighbor : getNeighbors(current)) {
-                if (visited.contains(neighbor)) {
-                    continue;
-                }
-                visited.add(neighbor);
-                double alt = dist.get(current) + distanceTo(neighbor, current);
-                if (queue.contains(neighbor)) {
-                    if (alt < dist.get(neighbor)) {
-                        dist.put(neighbor, alt);
-                        previous.put(neighbor, current);
-                    }
-                } else {
-                    dist.put(neighbor, alt);
+                int alt = gscore.get(current) + 1;
+                if (alt < gscore.getOrDefault(neighbor, Integer.MAX_VALUE)) {
+                    gscore.put(neighbor, alt);
                     previous.put(neighbor, current);
+                    fscore.put(neighbor, alt + distanceTo(neighbor, to));
                     queue.add(neighbor);
                 }
             }
         }
-        return buildPath(from, to, previous);
+        return List.of();
     }
 
     public static double distanceTo(WorldPoint first, WorldPoint second) {

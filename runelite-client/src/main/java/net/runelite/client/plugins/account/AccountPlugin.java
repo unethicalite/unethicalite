@@ -76,10 +76,10 @@ public class AccountPlugin extends Plugin
 	protected void startUp() throws Exception
 	{
 
-        long start = System.nanoTime();
-        log.info(CoolerPathfinder.getPath(new WorldPoint(3165, 3469, 0), new WorldPoint(2540, 3348, 0)).size() + "");
-        long end = System.nanoTime();
-        log.info("Time taken: " + (end - start) / 1000000 + "ms");
+		long start = System.nanoTime();
+		log.info(CoolerPathfinder.getPath(new WorldPoint(3165, 3469, 0), new WorldPoint(2540, 3348, 0)).size() + "");
+		long end = System.nanoTime();
+		log.info("Time taken: " + (end - start) / 1000000 + "ms");
 
 		loginButton = NavigationButton.builder()
 			.tab(false)
