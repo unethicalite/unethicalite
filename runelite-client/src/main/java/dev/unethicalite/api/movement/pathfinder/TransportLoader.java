@@ -62,7 +62,7 @@ public class TransportLoader
 		loadStaticTransports();
 	}
 
-	private static List<Transport> loadStaticTransports()
+	public static List<Transport> loadStaticTransports()
 	{
 		if (!STATIC_TRANSPORTS.isEmpty())
 		{

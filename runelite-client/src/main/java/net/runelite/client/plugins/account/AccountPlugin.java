@@ -52,6 +52,8 @@ import net.runelite.client.util.ImageUtil;
 @Slf4j
 public class AccountPlugin extends Plugin
 {
+
+	CoolerPathfinder pathfinder = new CoolerPathfinder();
 	@Inject
 	private SessionManager sessionManager;
 
@@ -75,7 +77,6 @@ public class AccountPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-
 		long start = System.nanoTime();
 		log.info(CoolerPathfinder.getPath(new WorldPoint(3165, 3469, 0), new WorldPoint(2540, 3348, 0)).size() + "");
 		long end = System.nanoTime();
