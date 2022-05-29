@@ -5,6 +5,7 @@ import net.unethicalite.api.game.Worlds
 import net.unethicalite.api.input.Keyboard
 import net.unethicalite.client.minimal.MinimalClient
 import net.runelite.api.GameState
+import net.unethicalite.client.Static
 import org.jboss.aerogear.security.otp.Totp
 import kotlin.system.exitProcess
 
@@ -29,20 +30,20 @@ class LoginEvent : BlockingEvent() {
     }
 
     override fun loop(): Int {
-        val loginMessage = Game.getClient().loginMessage
+        val loginMessage = Static.getClient().loginMessage
 
         if (validateTime > -1 && System.currentTimeMillis() - validateTime >= maxLoginScreenTime) {
             println("Spent longer than 10 mins in login screen, restarting client.")
             exitProcess(0)
         }
 
-        if (Game.getClient().worldList == null) {
+        if (Static.getClient().worldList == null) {
             Worlds.loadWorlds()
             return 1000
         }
 
-        if (Game.getClient().isWorldSelectOpen) {
-            Game.getClient().isWorldSelectOpen = false
+        if (Static.getClient().isWorldSelectOpen) {
+            Static.getClient().isWorldSelectOpen = false
             return 1000
         }
 
@@ -60,7 +61,7 @@ class LoginEvent : BlockingEvent() {
     }
 
     fun login(): Int {
-        val loginState = Game.getClient().loginIndex
+        val loginState = Static.getClient().loginIndex
         val gameAccount = MinimalClient.gameAccount
 
         when (loginState) {
@@ -72,7 +73,7 @@ class LoginEvent : BlockingEvent() {
                     return -1
                 }
 
-                Game.getClient().setOtp(totp!!.now())
+                Static.getClient().setOtp(totp!!.now())
                 Keyboard.sendEnter()
                 return 1000
             }
@@ -84,8 +85,8 @@ class LoginEvent : BlockingEvent() {
                         return 1000
                     }
 
-                    Game.getClient().username = gameAccount.username
-                    Game.getClient().password = gameAccount.password
+                    Static.getClient().username = gameAccount.username
+                    Static.getClient().password = gameAccount.password
                     Keyboard.sendEnter()
                     Keyboard.sendEnter()
                     return 1000
@@ -96,12 +97,12 @@ class LoginEvent : BlockingEvent() {
             }
 
             State.MAIN_MENU -> {
-                Game.getClient().loginIndex = State.ENTER_CREDENTIALS
+                Static.getClient().loginIndex = State.ENTER_CREDENTIALS
                 return 1000
             }
 
             State.BEEN_DISCONNECTED -> {
-                Game.getClient().loginIndex = State.ENTER_CREDENTIALS
+                Static.getClient().loginIndex = State.ENTER_CREDENTIALS
                 return 1000
             }
 

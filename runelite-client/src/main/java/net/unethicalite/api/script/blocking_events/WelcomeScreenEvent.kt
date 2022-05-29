@@ -1,8 +1,8 @@
 package net.unethicalite.api.script.blocking_events
 
-import net.unethicalite.api.game.Game
 import net.unethicalite.api.widgets.Widgets
 import net.runelite.api.MenuAction
+import net.unethicalite.client.Static
 
 class WelcomeScreenEvent : BlockingEvent() {
     companion object {
@@ -22,12 +22,12 @@ class WelcomeScreenEvent : BlockingEvent() {
         val newPlay = Widgets.get(413) { it.hasAction("Play") }
 
         if (Widgets.isVisible(play)) {
-            Game.getClient().interact(1, MenuAction.CC_OP.id, -1, play.id)
+            Static.getClient().interact(1, MenuAction.CC_OP.id, -1, play.id)
             return -1
         }
 
         if (Widgets.isVisible(play)) {
-            Game.getClient().interact(1, MenuAction.CC_OP.id, -1, newPlay.id)
+            Static.getClient().interact(1, MenuAction.CC_OP.id, -1, newPlay.id)
             return -1
         }
 
