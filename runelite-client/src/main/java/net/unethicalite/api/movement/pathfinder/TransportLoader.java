@@ -10,9 +10,11 @@ import net.unethicalite.api.game.GameThread;
 import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.game.Vars;
 import net.unethicalite.api.game.Worlds;
+import net.unethicalite.api.items.Equipment;
 import net.unethicalite.api.items.Inventory;
 import net.unethicalite.api.movement.Movement;
 import net.unethicalite.api.movement.Reachable;
+import net.unethicalite.api.movement.pathfinder.model.FairyRingLocation;
 import net.unethicalite.api.quests.Quest;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Widgets;
@@ -298,6 +300,22 @@ public class TransportLoader
 						"Open"));
 				}
 			});
+
+			// Fairy Rings
+			if (Equipment.contains(ItemID.DRAMEN_STAFF, ItemID.LUNAR_STAFF)
+					&& Quest.FAIRYTALE_II__CURE_A_QUEEN.getState() != QuestState.NOT_STARTED)
+			{
+				for (FairyRingLocation sourceRing : FairyRingLocation.values())
+				{
+					for (FairyRingLocation destRing : FairyRingLocation.values())
+					{
+						if (sourceRing != destRing)
+						{
+							transports.add(fairyRingTransport(sourceRing, destRing));
+						}
+					}
+				}
+			}
 		}
 
 		if (LAST_BUILD_TICK == Static.getClient().getTickCount())
@@ -417,6 +435,31 @@ public class TransportLoader
 			{
 				closedTrapDoor.interact(0);
 			}
+		}, null);
+	}
+
+	public static Transport fairyRingTransport(
+			FairyRingLocation source,
+			FairyRingLocation destination
+	)
+	{
+		return new Transport(source.getLocation(), destination.getLocation(), Integer.MAX_VALUE, 0, () ->
+		{
+			TileObject ring = TileObjects.getNearest("Fairy ring");
+
+			if (destination == FairyRingLocation.ZANARIS)
+			{
+				ring.interact("Zanaris");
+				return;
+			}
+
+			if (Widgets.isVisible(Widgets.get(WidgetInfo.FAIRY_RING)))
+			{
+				destination.travel();
+				return;
+			}
+
+			ring.interact("Configure");
 		}, null);
 	}
 
