@@ -6,6 +6,7 @@ import net.runelite.api.Varbits;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.unethicalite.api.game.GameThread;
 import net.unethicalite.api.game.Vars;
 import net.unethicalite.api.widgets.Widgets;
 
@@ -107,9 +108,11 @@ public enum FairyRingLocation
 
     public static String getCurrentCode()
     {
-        return CODES[0][Vars.getBit(Varbits.FAIRY_RING_DIAL_ADCB)]
+        return GameThread.invokeLater(() ->
+                CODES[0][Vars.getBit(Varbits.FAIRY_RING_DIAL_ADCB)]
                 + CODES[1][Vars.getBit(Varbits.FAIRY_RIGH_DIAL_ILJK)]
-                + CODES[2][Vars.getBit(Varbits.FAIRY_RING_DIAL_PSRQ)];
+                + CODES[2][Vars.getBit(Varbits.FAIRY_RING_DIAL_PSRQ)]
+        );
     }
 
 }
