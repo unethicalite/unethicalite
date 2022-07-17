@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Tomas Slusny <slusnucky@gmail.com>
+ * Copyright (c) 2019, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,49 +22,32 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.mixins;
+package net.runelite.http.api.ge;
 
-import net.runelite.api.WorldType;
-import net.runelite.api.events.WorldListLoad;
-import net.runelite.api.mixins.FieldHook;
-import net.runelite.api.mixins.Inject;
-import net.runelite.api.mixins.Mixin;
-import net.runelite.api.mixins.Shadow;
-import net.runelite.rs.api.RSClient;
-import net.runelite.rs.api.RSWorld;
+import com.google.gson.Gson;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.http.api.RuneLiteAPI;
+import okhttp3.OkHttpClient;
 
-import java.util.EnumSet;
+import java.util.UUID;
 
-@Mixin(RSWorld.class)
-public abstract class RSWorldMixin implements RSWorld
+@Slf4j
+@RequiredArgsConstructor
+public class GrandExchangeClient
 {
-	@Shadow("client")
-	private static RSClient client;
+	private static final Gson GSON = RuneLiteAPI.GSON;
 
-	@Inject
-	@Override
-	public EnumSet<WorldType> getTypes()
-	{
-		return WorldType.fromMask(getMask());
-	}
+	private final OkHttpClient client;
 
-	@Inject
-	@Override
-	public void setTypes(final EnumSet<WorldType> types)
-	{
-		setMask(WorldType.toMask(types));
-	}
+	@Setter
+	private UUID uuid;
+	@Setter
+	private String machineId;
 
-	@Inject
-	@FieldHook("population")
-	public void playerCountChanged(int idx)
+	public void submit(GrandExchangeTrade grandExchangeTrade)
 	{
-		RSWorld[] worlds = client.getWorldList();
-		if (worlds != null && worlds.length > 0 && worlds[worlds.length - 1] == this)
-		{
-			// this is the last world in the list.
-			WorldListLoad worldLoad = new WorldListLoad(worlds);
-			client.getCallbacks().post(worldLoad);
-		}
+
 	}
 }
