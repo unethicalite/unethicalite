@@ -66,11 +66,9 @@ import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.discord.webhook.DiscordMessage;
-import net.runelite.client.discord.webhook.DiscordMessageBuilder;
+import net.unethicalite.api.discord.DiscordMessage;
 import net.runelite.client.discord.webhook.DiscordWebhook;
-import net.runelite.client.discord.webhook.embeds.EmbedBuilder;
-import net.runelite.client.discord.webhook.embeds.EmbedObject;
+import net.unethicalite.api.discord.embeds.EmbedObject;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -558,12 +556,12 @@ public class LootTrackerPlugin extends Plugin
 		if (!config.discordWebhookUrl().equals(""))
 		{
 			DiscordWebhook webhook = new DiscordWebhook(config.discordWebhookUrl());
-			DiscordMessageBuilder messageBuilder = new DiscordMessageBuilder();
-			EmbedBuilder embedBuilder = new EmbedBuilder();
 
-			DiscordMessage message = messageBuilder
-					.setUsername("Unethicalite")
-					.setMessageContent(client.getLocalPlayer().getName() + " received from " + name + ":").build();
+			DiscordMessage message = DiscordMessage.builder()
+					.username("Unethicalite")
+					.messageContent(client.getLocalPlayer().getName() + " received from " + name + ":")
+					.build();
+
 
 			long totalValue = 0;
 			for (ItemStack item : items)
@@ -579,10 +577,10 @@ public class LootTrackerPlugin extends Plugin
 
 
 					ItemComposition itemComposition = itemManager.getItemComposition(itemId);
-					EmbedObject embedObject = embedBuilder
-							.setThumbnail(getItemImageURL(itemComposition.getId()))
-							.setTitle(item.getQuantity() + " x " + itemComposition.getName())
-							.setDescription("Price: " + NUMBER_FORMAT.format(total) + " gp")
+					EmbedObject embedObject = EmbedObject.builder()
+							.thumbnail(getItemImageURL(itemComposition.getId()))
+							.title(item.getQuantity() + " x " + itemComposition.getName())
+							.description("Price: " + NUMBER_FORMAT.format(total) + " gp")
 							.build();
 
 					message.getEmbeds().add(embedObject);
