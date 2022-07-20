@@ -56,6 +56,8 @@ dependencies {
 }
 
 injector {
+    skip.set("PlatformInfoVanilla;PlatformInfoRunelite;DesktopPlatformInfoProviderRunelite")
+    development.set(false)
     mixins.set(mixinsDep.singleFile)
     rsapi.set(rsapiDep.singleFile)
     rsclient.set(rsclientDep.singleFile)

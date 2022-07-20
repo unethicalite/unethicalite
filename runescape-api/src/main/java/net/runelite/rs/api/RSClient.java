@@ -1786,4 +1786,7 @@ public interface RSClient extends RSGameEngine, Client
 
 	@Import("staffModLevel")
 	void setStaffModLevel(int level);
+
+	@Construct
+	RSPlatformInfo createPlatformInfo(int var1, boolean var2, int var3, int var4, int var5, int var6, int var7, boolean var8, int var9, int var10, int var11, int var12, String var13, String var14, String var15, String var16, int var17, int var18, int var19, int var20, String var21, String var22, int[] var23, int var24, String var25);
 }
