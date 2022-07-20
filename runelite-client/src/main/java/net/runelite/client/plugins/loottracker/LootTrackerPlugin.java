@@ -66,6 +66,11 @@ import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.discord.webhook.DiscordMessage;
+import net.runelite.client.discord.webhook.DiscordMessageBuilder;
+import net.runelite.client.discord.webhook.DiscordWebhook;
+import net.runelite.client.discord.webhook.embeds.EmbedBuilder;
+import net.runelite.client.discord.webhook.embeds.EmbedObject;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -89,6 +94,7 @@ import org.apache.commons.text.WordUtils;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -529,7 +535,67 @@ public class LootTrackerPlugin extends Plugin
 		final LootTrackerItem[] entries = buildEntries(stack(items));
 		SwingUtilities.invokeLater(() -> panel.add(name, type, combatLevel, entries, amount));
 
+		try
+		{
+			processLoot(name, items);
+		}
+		catch (Exception ex)
+		{
+			log.warn("Failed to process loot with discord integration", ex);
+		}
+
 		eventBus.post(new LootReceived(name, combatLevel, type, items, amount));
+	}
+
+	private String getItemImageURL(int itemId)
+	{
+		return "https://static.runelite.net/cache/item/icon/" + itemId + ".png";
+	}
+	private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("#,###,###,###");
+
+	private void processLoot(String name, Collection<ItemStack> items)
+	{
+		if (!config.discordWebhookUrl().equals(""))
+		{
+			DiscordWebhook webhook = new DiscordWebhook(config.discordWebhookUrl());
+			DiscordMessageBuilder messageBuilder = new DiscordMessageBuilder();
+			EmbedBuilder embedBuilder = new EmbedBuilder();
+
+			DiscordMessage message = messageBuilder
+					.setUsername("Unethicalite")
+					.setMessageContent(client.getLocalPlayer().getName() + " received from " + name + ":").build();
+
+			long totalValue = 0;
+			for (ItemStack item : items)
+			{
+				int itemId = item.getId();
+				int qty = item.getQuantity();
+
+				int price = itemManager.getItemPrice(itemId);
+				long total = (long) price * qty;
+				if (total >= config.discordMinimumValue())
+				{
+					totalValue += total;
+
+
+					ItemComposition itemComposition = itemManager.getItemComposition(itemId);
+					EmbedObject embedObject = embedBuilder
+							.setThumbnail(getItemImageURL(itemComposition.getId()))
+							.setTitle(item.getQuantity() + " x " + itemComposition.getName())
+							.setDescription("Price: " + NUMBER_FORMAT.format(total) + " gp")
+							.build();
+
+					message.getEmbeds().add(embedObject);
+
+				}
+			}
+
+			if (config.discordMinimumValue() == 0 || totalValue >= config.discordMinimumValue())
+			{
+				webhook.send(message);
+			}
+		}
+
 	}
 
 	@Subscribe

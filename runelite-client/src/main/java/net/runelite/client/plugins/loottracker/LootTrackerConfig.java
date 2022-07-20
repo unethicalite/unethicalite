@@ -138,4 +138,24 @@ public interface LootTrackerConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+			keyName = "discordWebhookUrl",
+			name = "Discord Webhook URL",
+			description = "Webhook to submit received loot to"
+	)
+	default String discordWebhookUrl()
+    {
+		return "";
+	}
+
+    @ConfigItem(
+            keyName = "discordMinimumValue",
+            name = "Discord minimum value",
+            description = "Minimum value of an item to be posted to discord"
+    )
+    default int discordMinimumValue()
+    {
+        return 100000;
+    }
 }

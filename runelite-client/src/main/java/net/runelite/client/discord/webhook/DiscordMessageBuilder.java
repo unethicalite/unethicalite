@@ -80,7 +80,6 @@ public class DiscordMessageBuilder
         return this;
     }
 
-
     public DiscordMessage build()
     {
         return new DiscordMessage(this);
