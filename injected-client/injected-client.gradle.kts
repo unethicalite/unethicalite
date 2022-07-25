@@ -56,7 +56,7 @@ dependencies {
 }
 
 injector {
-    skip.set("PlatformInfoVanilla;PlatformInfoRunelite;DesktopPlatformInfoProviderRunelite")
+    skip.set("PlatformInfoRunelite;DesktopPlatformInfoProviderRunelite")
     development.set(false)
     mixins.set(mixinsDep.singleFile)
     rsapi.set(rsapiDep.singleFile)
