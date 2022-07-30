@@ -9,6 +9,7 @@ import net.runelite.api.Player;
 import net.runelite.api.Point;
 import net.runelite.api.Tile;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
@@ -101,6 +102,13 @@ public class Movement
 				x,
 				y
 		);
+	}
+
+	@Deprecated
+	public static boolean walkTo(WorldArea worldArea)
+	{
+		log.warn("WorldArea's will no longer be supported with the walker, either use a WorldPoint or handle randomizing destinations in the plugin");
+		return Walker.walkTo(worldArea.toWorldPoint());
 	}
 
 	public static void walk(Locatable locatable)

@@ -54,6 +54,11 @@ public class Walker
 	private static WorldPoint currentDestination = null;
 	public static boolean walkTo(WorldPoint destination)
 	{
+		if (Static.getGlobalCollisionMap().fullBlock(destination))
+		{
+			log.warn("Walking to a block tiled, pathfinder will be slow");
+		}
+
 		Player local = Players.getLocal();
 		if (destination.equals(local.getWorldLocation()))
 		{
