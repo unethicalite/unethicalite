@@ -1,17 +1,5 @@
 package net.unethicalite.api.movement;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import net.unethicalite.api.commons.Rand;
-import net.unethicalite.api.entities.Players;
-import net.unethicalite.api.game.Vars;
-import net.unethicalite.api.movement.pathfinder.model.BankLocation;
-import net.unethicalite.api.movement.pathfinder.CollisionMap;
-import net.unethicalite.api.movement.pathfinder.Walker;
-import net.unethicalite.api.scene.Tiles;
-import net.unethicalite.api.widgets.Widgets;
-import net.unethicalite.client.Static;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Locatable;
@@ -21,43 +9,24 @@ import net.runelite.api.Player;
 import net.runelite.api.Point;
 import net.runelite.api.Tile;
 import net.runelite.api.coords.LocalPoint;
-import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.game.Vars;
+import net.unethicalite.api.movement.pathfinder.Walker;
+import net.unethicalite.api.movement.pathfinder.model.BankLocation;
+import net.unethicalite.api.scene.Tiles;
+import net.unethicalite.api.widgets.Widgets;
+import net.unethicalite.client.Static;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class Movement
 {
-	private static final Logger logger = LoggerFactory.getLogger(Movement.class);
-
 	private static final int STAMINA_VARBIT = 25;
 	private static final int RUN_VARP = 173;
-
-	public static final LoadingCache<List<WorldPoint>, WorldPoint> WORLD_AREA_POINT_CACHE = CacheBuilder.newBuilder()
-			.maximumSize(5)
-			.expireAfterWrite(5, TimeUnit.MINUTES)
-			.build(new CacheLoader<>()
-			{
-				@Override
-				public WorldPoint load(@NotNull List<WorldPoint> key)
-				{
-					List<WorldPoint> wpList = new ArrayList<>(key);
-					CollisionMap cm = Static.getGlobalCollisionMap();
-					wpList.removeIf(cm::fullBlock);
-					return wpList.get(Rand.nextInt(0, wpList.size()));
-				}
-			});
 
 	public static void setDestination(int sceneX, int sceneY)
 	{
@@ -104,14 +73,14 @@ public class Movement
 		// Check if tile is in loaded client scene
 		if (destinationTile == null)
 		{
-			logger.debug("Destination {} is not in scene", worldPoint);
+			log.debug("Destination {} is not in scene", worldPoint);
 			Tile nearestInScene = Tiles.getAll()
 					.stream()
 					.min(Comparator.comparingInt(x -> x.getWorldLocation().distanceTo(local.getWorldLocation())))
 					.orElse(null);
 			if (nearestInScene == null)
 			{
-				logger.debug("Couldn't find nearest walkable tile");
+				log.debug("Couldn't find nearest walkable tile");
 				return;
 			}
 
@@ -134,46 +103,9 @@ public class Movement
 		);
 	}
 
-	public static void walk(WorldArea worldArea)
-	{
-		Player local = Players.getLocal();
-
-		if (worldArea.contains(local.getWorldLocation()))
-		{
-			return;
-		}
-
-		var points = worldArea.toWorldPointList();
-		walk(points.get(Rand.nextInt(0, points.size())));
-	}
-
 	public static void walk(Locatable locatable)
 	{
 		walk(locatable.getWorldLocation());
-	}
-
-	public static boolean walkTo(WorldPoint worldPoint, int radius)
-	{
-		WorldArea worldArea = new WorldArea(
-				worldPoint.dx(-radius).dy(-radius),
-				worldPoint.dx(radius).dy(radius)
-		);
-
-		return Movement.walkTo(worldArea);
-	}
-
-	public static boolean walkTo(WorldArea worldArea)
-	{
-		try
-		{
-			WorldPoint wp = WORLD_AREA_POINT_CACHE.get(worldArea.toWorldPointList());
-			return Walker.walkTo(wp);
-		}
-		catch (ExecutionException e)
-		{
-			log.error("Failed to get cached WorldPoint", e);
-			return false;
-		}
 	}
 
 	public static boolean walkTo(WorldPoint worldPoint)
@@ -188,7 +120,7 @@ public class Movement
 
 	public static boolean walkTo(BankLocation bankLocation)
 	{
-		return walkTo(bankLocation.getArea());
+		return walkTo(bankLocation.getArea().getCenter());
 	}
 
 	public static boolean walkTo(int x, int y)
@@ -227,34 +159,6 @@ public class Movement
 
 	public static int calculateDistance(WorldPoint destination)
 	{
-		List<WorldPoint> path = Walker.buildPath(destination);
-
-		if (path.size() < 2)
-		{
-			return 0;
-		}
-
-		Iterator<WorldPoint> it = path.iterator();
-		WorldPoint prev = it.next();
-		WorldPoint current;
-		int distance = 0;
-
-		// WorldPoint#distanceTo() returns max int when planes are different, but since the pathfinder can traverse
-		// obstacles, we just add one to the distance to account for whatever obstacle is in between the current point
-		// and the next.
-		while (it.hasNext())
-		{
-			current = it.next();
-			if (prev.getPlane() != current.getPlane())
-			{
-				distance += 1;
-			}
-			else
-			{
-				distance += Math.max(Math.abs(prev.getX() - current.getX()), Math.abs(prev.getY() - current.getY()));
-			}
-		}
-
-		return distance;
+		return Walker.calculatePath(destination).size();
 	}
 }

@@ -1,97 +1,118 @@
 package net.unethicalite.api.movement.pathfinder.model;
 
+import net.runelite.api.*;
+import net.runelite.api.coords.WorldPoint;
+import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.game.Vars;
 import net.unethicalite.api.items.Inventory;
-import net.runelite.api.ItemID;
-import net.runelite.api.coords.WorldPoint;
+import net.unethicalite.api.quests.Quests;
 
 public enum TeleportItem
 {
-	// Tabs
-	WATERBIRTH_TELEPORT_TAB(new WorldPoint(2546, 3757, 0), "Waterbirth teleport", ItemID.WATERBIRTH_TELEPORT, "Break"),
-	KHAZARD_TELEPORT_TAB(new WorldPoint(2637, 3166, 0), "Khazard teleport", ItemID.KHAZARD_TELEPORT, "Break"),
-	VARROCK_TELEPORT_TAB(new WorldPoint(3212, 3424, 0), "Varrock teleport", ItemID.VARROCK_TELEPORT, "Break"),
-	LUMBRIDGE_TELEPORT_TAB(new WorldPoint(3225, 3219, 0), "Lumbridge teleport", ItemID.LUMBRIDGE_TELEPORT, "Break"),
-	FALADOR_TELEPORT_TAB(new WorldPoint(2966, 3379, 0), "Falador teleport", ItemID.FALADOR_TELEPORT, "Break"),
-	CAMELOT_TELEPORT_TAB(new WorldPoint(2757, 3479, 0), "Camelot teleport", ItemID.CAMELOT_TELEPORT, "Break"),
-	ARDOUGNE_TELEPORT_TAB(new WorldPoint(2661, 3300, 0), "Ardougne teleport", ItemID.ARDOUGNE_TELEPORT, "Break"),
-	WEST_ARDOUGNE_TELEPORT_TAB(new WorldPoint(2500, 3290, 0), "West ardougne teleport", ItemID.WEST_ARDOUGNE_TELEPORT, "Break"),
-	RIMMINGTON_TELEPORT_TAB(new WorldPoint(2954, 3224, 0), "Rimmington teleport", ItemID.RIMMINGTON_TELEPORT, "Break"),
-	TAVERLEY_TELEPORT_TAB(new WorldPoint(2894, 3465, 0), "Taverley teleport", ItemID.TAVERLEY_TELEPORT, "Break"),
-	RELLEKKA_TELEPORT_TAB(new WorldPoint(2668, 3631, 0), "Rellekka teleport", ItemID.RELLEKKA_TELEPORT, "Break"),
-	BRIMHAVEN_TELEPORT_TAB(new WorldPoint(2758, 3178, 0), "Brimhaven teleport", ItemID.BRIMHAVEN_TELEPORT, "Break"),
-	POLLNIVNEACH_TELEPORT_TAB(new WorldPoint(3340, 3004, 0), "Pollnivneach teleport", ItemID.POLLNIVNEACH_TELEPORT, "Break"),
-	YANILLE_TELEPORT_TAB(new WorldPoint(2544, 3095, 0), "Yanille teleport", ItemID.YANILLE_TELEPORT, "Break"),
-	HOSIDIUS_TELEPORT_TAB(new WorldPoint(1744, 3517, 0), "Hosidius teleport", ItemID.HOSIDIUS_TELEPORT, "Break"),
-	SALVE_GRAVEYARD_TELEPORT_TAB(new WorldPoint(3432, 3460, 0), "Salve Graveyard teleport",
-			ItemID.SALVE_GRAVEYARD_TELEPORT, "Break"),
+    // Tabs
+    WATERBIRTH_TELEPORT_TAB(new WorldPoint(2546, 3757, 0), "Break", null, ItemID.WATERBIRTH_TELEPORT),
+    KHAZARD_TELEPORT_TAB(new WorldPoint(2637, 3166, 0), "Break", null, ItemID.KHAZARD_TELEPORT),
+    VARROCK_TELEPORT_TAB(new WorldPoint(3212, 3424, 0), "Break", null, ItemID.VARROCK_TELEPORT),
+    LUMBRIDGE_TELEPORT_TAB(new WorldPoint(3225, 3219, 0), "Break", null, ItemID.LUMBRIDGE_TELEPORT),
+    FALADOR_TELEPORT_TAB(new WorldPoint(2966, 3379, 0), "Break", null, ItemID.FALADOR_TELEPORT),
+    CAMELOT_TELEPORT_TAB(new WorldPoint(2757, 3479, 0), "Break", null, ItemID.CAMELOT_TELEPORT),
+    ARDOUGNE_TELEPORT_TAB(new WorldPoint(2661, 3300, 0), "Break", null, ItemID.ARDOUGNE_TELEPORT),
+    WEST_ARDOUGNE_TELEPORT_TAB(new WorldPoint(2500, 3290, 0), "Break", null, ItemID.WEST_ARDOUGNE_TELEPORT),
+    RIMMINGTON_TELEPORT_TAB(new WorldPoint(2954, 3224, 0), "Break", null, ItemID.RIMMINGTON_TELEPORT),
+    TAVERLEY_TELEPORT_TAB(new WorldPoint(2894, 3465, 0), "Break", null, ItemID.TAVERLEY_TELEPORT),
+    RELLEKKA_TELEPORT_TAB(new WorldPoint(2668, 3631, 0), "Break", null, ItemID.RELLEKKA_TELEPORT),
+    BRIMHAVEN_TELEPORT_TAB(new WorldPoint(2758, 3178, 0), "Break", null, ItemID.BRIMHAVEN_TELEPORT),
+    POLLNIVNEACH_TELEPORT_TAB(new WorldPoint(3340, 3004, 0), "Break", null, ItemID.POLLNIVNEACH_TELEPORT),
+    YANILLE_TELEPORT_TAB(new WorldPoint(2544, 3095, 0), "Break", null, ItemID.YANILLE_TELEPORT),
+    HOSIDIUS_TELEPORT_TAB(new WorldPoint(1744, 3517, 0), "Break", null, ItemID.HOSIDIUS_TELEPORT),
+    SALVE_GRAVEYARD_TELEPORT_TAB(new WorldPoint(3432, 3460, 0), "Break", null, ItemID.SALVE_GRAVEYARD_TELEPORT),
 
-	// Scrolls
-	FELDIP_HILLS_TELEPORT(new WorldPoint(2541, 2925, 0), "Feldip hills teleport", ItemID.FELDIP_HILLS_TELEPORT,
-			"Teleport"),
-	PISCATORIS_TELEPORT(new WorldPoint(2342, 3647, 0), "Piscatoris teleport", ItemID.PISCATORIS_TELEPORT,
-			"Teleport"),
-	MORTTON_TELEPORT(new WorldPoint(3488, 3288, 0), "Mort'ton teleport", ItemID.MORTTON_TELEPORT,
-			"Teleport"),
-	DIGSITE_TELEPORT(new WorldPoint(3324, 3412, 0), "Digsite teleport", ItemID.DIGSITE_TELEPORT,
-			"Teleport"),
-	NARDAH_TELEPORT(new WorldPoint(3420, 2917, 0), "Nardah teleport", ItemID.NARDAH_TELEPORT,
-			"Teleport"),
-	LUMBERYARD_TELEPORT(new WorldPoint(3302, 3486, 0), "Lumberyard teleport", ItemID.LUMBERYARD_TELEPORT,
-			"Teleport"),
-	TAI_BWO_TELEPORT(new WorldPoint(2789, 3066, 0), "Tai bwo wannai teleport", ItemID.TAI_BWO_WANNAI_TELEPORT,
-			"Teleport"),
-	ZULANDRA_TELEPORT(new WorldPoint(2197, 3055, 0), "Zul-andra teleport", ItemID.ZULANDRA_TELEPORT,
-			"Teleport"),
-	IORWERTH_TELEPORT(new WorldPoint(2194, 3258, 0), "Iorwerth camp teleport", ItemID.IORWERTH_CAMP_TELEPORT,
-			"Teleport"),
+    // Scrolls
+    FELDIP_HILLS_TELEPORT(new WorldPoint(2541, 2925, 0), "Teleport", null, ItemID.FELDIP_HILLS_TELEPORT),
+    PISCATORIS_TELEPORT(new WorldPoint(2342, 3647, 0), "Teleport", null, ItemID.PISCATORIS_TELEPORT),
+    MORTTON_TELEPORT(new WorldPoint(3488, 3288, 0), "Teleport", null, ItemID.MORTTON_TELEPORT),
+    DIGSITE_TELEPORT(new WorldPoint(3324, 3412, 0), "Teleport", null, ItemID.DIGSITE_TELEPORT),
+    NARDAH_TELEPORT(new WorldPoint(3420, 2917, 0), "Teleport", null, ItemID.NARDAH_TELEPORT),
+    LUMBERYARD_TELEPORT(new WorldPoint(3302, 3486, 0), "Teleport", null, ItemID.LUMBERYARD_TELEPORT),
+    TAI_BWO_TELEPORT(new WorldPoint(2789, 3066, 0), "Teleport", null, ItemID.TAI_BWO_WANNAI_TELEPORT),
+    ZULANDRA_TELEPORT(new WorldPoint(2197, 3055, 0), "Teleport", null, ItemID.ZULANDRA_TELEPORT),
+    IORWERTH_TELEPORT(new WorldPoint(2194, 3258, 0), "Teleport", null, ItemID.IORWERTH_CAMP_TELEPORT),
+    LUNAR_ISLE_TELEPORT(new WorldPoint(2093, 3912, 0), "Teleport", null, ItemID.LUNAR_ISLE_TELEPORT),
+    MOS_LEHARMLESS_TELEPORT(new WorldPoint(3701, 2996, 0), "Teleport", null, ItemID.MOS_LEHARMLESS_TELEPORT),
+    PEST_CONTROL_TELEPORT(new WorldPoint(2657, 2660, 0), "Teleport", null, ItemID.PEST_CONTROL_TELEPORT),
+    KEY_MASTER_TELEPORT(new WorldPoint(2686, 9882, 0), "Teleport", null, ItemID.KEY_MASTER_TELEPORT),
+    REVENANT_CAVE_TELEPORT(new WorldPoint(3127, 3833, 0), "Teleport", null, ItemID.REVENANT_CAVE_TELEPORT),
+    WATSON_TELEPORT(new WorldPoint(1645, 3579, 0), "Teleport", null, ItemID.WATSON_TELEPORT),
 
-	// Items
-	ECTOPHIAL(new WorldPoint(3659, 3523, 0), "Ectophial", ItemID.ECTOPHIAL, "Empty"),
+    // Misc consumables
+    WEISS_ICY_BASALT(new WorldPoint(2846, 3940, 0), "Weiss", Quest.MAKING_FRIENDS_WITH_MY_ARM, ItemID.ICY_BASALT),
+    TROLL_STRONGHOLD(new WorldPoint(2838, 3693, 0), "Troll Stronghold", Quest.MAKING_FRIENDS_WITH_MY_ARM, ItemID.STONY_BASALT),
+    TROLL_STRONGHOLD_OUTSIDE(new WorldPoint(2844, 3693, 0), "Troll Stronghold", Quest.MAKING_FRIENDS_WITH_MY_ARM, ItemID.STONY_BASALT),
 
-	;
+    // Reusable
+    // TODO Eh??
+    //	CHAMPIONS_GUILD_CHRONICLE(new WorldPoint(3202, 3357, 0), "Champions' Guild", null, ItemID.CHRONICLE),
+    GRAND_TREE(new WorldPoint(2465, 3495, 0), "Grand Tree", null, ItemID.ROYAL_SEED_POD),
+    ECTOPHIAL(new WorldPoint(3659, 3523, 0), "Empty", null, ItemID.ECTOPHIAL),
+    TELEPORT_CRYSTAL_LLETYA(new WorldPoint(2330, 3172, 0), "Lletya", null, MovementConstants.TELEPORT_CRYSTAL),
+    TELEPORT_CRYSTAL_PRIFDDINAS(new WorldPoint(3264, 6065, 0), "Prifddinas", Quest.SONG_OF_THE_ELVES, MovementConstants.TELEPORT_CRYSTAL),
+    RELLEKKKA_LYRE(new WorldPoint(2664, 3643, 0), "Rellekka", Quest.THE_FREMENNIK_TRIALS, MovementConstants.ENCHANTED_LYRE),
+    WATERBIRTH_ISLAND_LYRE(new WorldPoint(2550, 3756, 0), "Waterbirth Island", Quest.THE_FREMENNIK_TRIALS, MovementConstants.ENCHANTED_LYRE),
+    NEITIZNOT_LYRE(new WorldPoint(2336, 3801, 0), "Neitiznot", Quest.THE_FREMENNIK_TRIALS, MovementConstants.ENCHANTED_LYRE),
+    JATIZSO_LYRE(new WorldPoint(2409, 3809, 0), "Jatizso", Quest.THE_FREMENNIK_TRIALS, MovementConstants.ENCHANTED_LYRE),
+    ;
 
-	private final WorldPoint destination;
-	private final String itemName;
-	private final int itemId;
-	private final String action;
+    private final WorldPoint destination;
+    private final Quest requirement;
+    private final int[] itemIds;
+    private final String action;
 
-	TeleportItem(WorldPoint destination, String itemName, int itemId, String action)
-	{
-		this.destination = destination;
-		this.itemName = itemName;
-		this.itemId = itemId;
-		this.action = action;
-	}
+    TeleportItem(WorldPoint destination, String action, Quest requirement, int... itemIds)
+    {
+        this.destination = destination;
+        this.requirement = requirement;
+        this.itemIds = itemIds;
+        this.action = action;
+    }
 
-	public WorldPoint getDestination()
-	{
-		return destination;
-	}
+    public WorldPoint getDestination()
+    {
+        return destination;
+    }
 
-	public String getItemName()
-	{
-		return itemName;
-	}
+    public int[] getItemId()
+    {
+        return itemIds;
+    }
 
-	public int getItemId()
-	{
-		return itemId;
-	}
+    public String getAction()
+    {
+        return action;
+    }
 
-	public String getAction()
-	{
-		return action;
-	}
+    public boolean canUse()
+    {
+        return hasRequirements() && Inventory.getFirst(itemIds) != null;
+    }
 
-	public boolean canUse()
-	{
-		return hasRequirements() && Inventory.getFirst(itemId) != null;
-	}
-
-	public boolean hasRequirements()
-	{
-		return (this != ARDOUGNE_TELEPORT_TAB || Vars.getVarp(165) >= 30)
-				&& (this != SALVE_GRAVEYARD_TELEPORT_TAB || Vars.getVarp(302) >= 61);
-	}
+    public boolean hasRequirements()
+    {
+        boolean hasQuestReqs = (requirement == null || Quests.getState(requirement) == QuestState.FINISHED);
+        switch (this)
+        {
+            case JATIZSO_LYRE:
+            case NEITIZNOT_LYRE:
+                return hasQuestReqs && Vars.getBit(Varbits.DIARY_FREMENNIK_ELITE) > 0;
+            case WATERBIRTH_ISLAND_LYRE:
+                return hasQuestReqs && Vars.getBit(Varbits.DIARY_FREMENNIK_HARD) > 0;
+            case TROLL_STRONGHOLD:
+                return hasQuestReqs && Skills.getLevel(Skill.AGILITY) >= 73 && Vars.getBit(Varbits.DIARY_FREMENNIK_HARD) > 0;
+            case ARDOUGNE_TELEPORT_TAB:
+                return hasQuestReqs && Vars.getVarp(165) >= 30;
+            case SALVE_GRAVEYARD_TELEPORT_TAB:
+                return hasQuestReqs && Vars.getVarp(302) >= 61;
+            default:
+                return hasQuestReqs;
+        }
+    }
 }

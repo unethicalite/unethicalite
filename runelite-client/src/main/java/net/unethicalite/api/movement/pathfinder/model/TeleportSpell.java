@@ -74,19 +74,19 @@ public enum TeleportSpell
 	),
 	DAREEYAK_TELEPORT(
 			SpellBook.Ancient.DAREEYAK_TELEPORT,
-			null
+			new WorldPoint(2969, 3695, 0)
 	),
 	CARRALLANGER_TELEPORT(
 			SpellBook.Ancient.CARRALLANGER_TELEPORT,
-			null
+			new WorldPoint(3157, 3667, 0)
 	),
 	ANNAKARL_TELEPORT(
 			SpellBook.Ancient.ANNAKARL_TELEPORT,
-			null
+			new WorldPoint(3288, 3888, 0)
 	),
 	GHORROCK_TELEPORT(
 			SpellBook.Ancient.GHORROCK_TELEPORT,
-			null
+			new WorldPoint(2977, 3872, 0)
 	),
 
 	// LUNAR TELEPORTS
@@ -123,7 +123,7 @@ public enum TeleportSpell
 	),
 	ICE_PLATEAU_TELEPORT(
 			SpellBook.Lunar.ICE_PLATEAU_TELEPORT,
-			null
+			new WorldPoint(2973, 3939, 0)
 	),
 
 	// NECROMANCY TELEPORTS
@@ -169,7 +169,7 @@ public enum TeleportSpell
 	),
 	CEMETERY_TELEPORT(
 			SpellBook.Necromancy.CEMETERY_TELEPORT,
-			null
+			new WorldPoint(2978, 3763, 0)
 	),
 	BARROWS_TELEPORT(
 			SpellBook.Necromancy.BARROWS_TELEPORT,

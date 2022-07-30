@@ -3,7 +3,6 @@ package net.unethicalite.api.movement.pathfinder;
 import lombok.Data;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.movement.pathfinder.model.Transport;
 
@@ -16,12 +15,13 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
+import static net.unethicalite.api.movement.pathfinder.model.MovementConstants.WILDERNESS_ABOVE_GROUND;
+import static net.unethicalite.api.movement.pathfinder.model.MovementConstants.WILDERNESS_UNDERGROUND;
+
 @Data
 @Slf4j
 public class Pathfinder implements Callable<List<WorldPoint>>
 {
-	private static final WorldArea WILDERNESS_ABOVE_GROUND = new WorldArea(2944, 3523, 448, 448, 0);
-	private static final WorldArea WILDERNESS_UNDERGROUND = new WorldArea(2944, 9918, 320, 442, 0);
 	final CollisionMap map;
 	final Map<WorldPoint, List<Transport>> transports;
 	private List<Node> start;
@@ -116,7 +116,10 @@ public class Pathfinder implements Callable<List<WorldPoint>>
 
 	public List<WorldPoint> find()
 	{
-		return find(5_000_000);
+		long startTime = System.currentTimeMillis();
+		List<WorldPoint> path = find(5_000_000);
+		log.info("Path calculation took {} ms to {}", System.currentTimeMillis() - startTime, target);
+		return path;
 	}
 
 	public List<WorldPoint> find(int maxSearch)
@@ -164,10 +167,7 @@ public class Pathfinder implements Callable<List<WorldPoint>>
 	@Override
 	public List<WorldPoint> call() throws Exception
 	{
-		long startTime = System.currentTimeMillis();
-		List<WorldPoint> path = find();
-		log.debug("Path calculation took {} ms", System.currentTimeMillis() - startTime);
-		return path;
+		return find();
 	}
 
 	@Value
