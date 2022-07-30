@@ -377,13 +377,17 @@ public class Walker
 	}
 
 	public static List<WorldPoint> calculatePath(WorldPoint destination) {
-		if (Static.getClient().isClientThread()) {
-			throw new RuntimeException("Calculate path cannot be called on client thread");
-		}
 		Player local = Players.getLocal();
 		LinkedHashMap<WorldPoint, Teleport> teleports = buildTeleportLinks(destination);
 		List<WorldPoint> startPoints = new ArrayList<>(teleports.keySet());
 		startPoints.add(local.getWorldLocation());
+		return calculatePath(startPoints, destination);
+	}
+
+	public static List<WorldPoint> calculatePath(List<WorldPoint> startPoints, WorldPoint destination) {
+		if (Static.getClient().isClientThread()) {
+			throw new RuntimeException("Calculate path cannot be called on client thread");
+		}
 		return new Pathfinder(Static.getGlobalCollisionMap(), buildTransportLinks(), startPoints, destination, RegionManager.avoidWilderness()).find();
 	}
 

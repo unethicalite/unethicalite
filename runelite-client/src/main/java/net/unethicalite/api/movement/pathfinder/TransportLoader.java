@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,7 +91,7 @@ public class TransportLoader
 
 			List<Transport> transports = new ArrayList<>();
 
-			boolean princeAliCompleted = Quests.getState(Quest.PRINCE_ALI_RESCUE) == QuestState.FINISHED;
+			boolean princeAliCompleted = Quests.isFinished(Quest.PRINCE_ALI_RESCUE);
 			int gold = Inventory.getFirst(995) != null ? Inventory.getFirst(995).getQuantity() : 0;
 			if (gold >= 10 || princeAliCompleted)
 			{
@@ -128,7 +127,7 @@ public class TransportLoader
 				boolean ringOfCharos = Equipment.contains(ItemID.RING_OF_CHAROS, ItemID.RING_OF_CHAROSA);
 
 				//morytania
-				if (Quests.getState(Quest.IN_SEARCH_OF_THE_MYREQUE) == QuestState.FINISHED && (ringOfCharos || gold >= 10))
+				if (Quests.isFinished(Quest.IN_SEARCH_OF_THE_MYREQUE) && (ringOfCharos || gold >= 10))
 				{
 					transports.add(objectTransport(new WorldPoint(3522, 3285, 0), new WorldPoint(3498, 3380, 0), 6969,
 							"Quick-board"));
@@ -192,11 +191,11 @@ public class TransportLoader
 				}
 
 				// Spirit Trees
-				if (Quests.getState(Quest.TREE_GNOME_VILLAGE) == QuestState.FINISHED)
+				if (Quests.isFinished(Quest.TREE_GNOME_VILLAGE))
 				{
 					for (var source : SPIRIT_TREES)
 					{
-						if (source.location.equals("Gnome Stronghold") && Quests.getState(Quest.THE_GRAND_TREE) != QuestState.FINISHED)
+						if (source.location.equals("Gnome Stronghold") && !Quests.isFinished(Quest.THE_GRAND_TREE))
 						{
 							continue;
 						}
@@ -212,7 +211,7 @@ public class TransportLoader
 					}
 				}
 
-				if (Quests.getState(Quest.THE_LOST_TRIBE) == QuestState.FINISHED)
+				if (Quests.isFinished(Quest.THE_LOST_TRIBE))
 				{
 					transports.add(npcTransport(new WorldPoint(3229, 9610, 0), new WorldPoint(3316, 9613, 0), NpcID.KAZGAR_7301, "Mines"));
 					transports.add(npcTransport(new WorldPoint(3316, 9613, 0), new WorldPoint(3229, 9610, 0), NpcID.MISTAG_7299, "Cellar"));
@@ -236,7 +235,7 @@ public class TransportLoader
 				}
 
 				// Waterbirth island
-				if (Quests.getState(Quest.THE_FREMENNIK_TRIALS) == QuestState.FINISHED || gold >= 1000)
+				if (Quests.isFinished(Quest.THE_FREMENNIK_TRIALS) || gold >= 1000)
 				{
 					transports.add(npcTransport(new WorldPoint(2544, 3760, 0), new WorldPoint(2620, 3682, 0), 10407, "Rellekka"));
 					transports.add(npcTransport(new WorldPoint(2620, 3682, 0), new WorldPoint(2547, 3759, 0), 5937, "Waterbirth Island"));

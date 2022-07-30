@@ -133,29 +133,36 @@ public class GlobalCollisionMap implements CollisionMap
 	public GlobalCollisionMap withLocalCollisions()
 	{
 		GlobalCollisionMap newMap = this.copy();
-		Static.getRegionManager().getTileFlags().forEach(tileFlag -> {
+		Static.getRegionManager().getTileFlags().forEach(tileFlag ->
+		{
 			int region = tileFlag.getRegion();
 			int x = tileFlag.getX();
 			int y = tileFlag.getY();
 			int z = tileFlag.getZ();
 			int flag = tileFlag.getFlag();
 
-			if (newMap.regions[region] == null) {
+			if (newMap.regions[region] == null)
+			{
 				newMap.createRegion(region);
 			}
 
-			if (Reachable.isObstacle(flag)) {
+			if (Reachable.isObstacle(flag))
+			{
 				newMap.set(x, y, z, 0, false);
 				newMap.set(x, y, z, 1, false);
-			} else {
+			}
+			else
+			{
 				newMap.set(x, y, z, 0, true);
 				newMap.set(x, y, z, 1, true);
 
-				if (Reachable.isWalled(Direction.NORTH, flag)) {
+				if (Reachable.isWalled(Direction.NORTH, flag))
+				{
 					newMap.set(x, y, z, 0, false);
 				}
 
-				if (Reachable.isWalled(Direction.EAST, flag)) {
+				if (Reachable.isWalled(Direction.EAST, flag))
+				{
 					newMap.set(x, y, z, 1, false);
 				}
 			}

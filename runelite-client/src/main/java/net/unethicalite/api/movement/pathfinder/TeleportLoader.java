@@ -1,9 +1,6 @@
 package net.unethicalite.api.movement.pathfinder;
 
-import net.runelite.api.GameState;
-import net.runelite.api.Item;
-import net.runelite.api.ObjectID;
-import net.runelite.api.TileObject;
+import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
@@ -22,6 +19,7 @@ import net.unethicalite.api.magic.Spell;
 import net.unethicalite.api.movement.pathfinder.model.Teleport;
 import net.unethicalite.api.movement.pathfinder.model.TeleportItem;
 import net.unethicalite.api.movement.pathfinder.model.TeleportSpell;
+import net.unethicalite.api.quests.Quests;
 import net.unethicalite.api.widgets.Dialog;
 import net.unethicalite.api.widgets.Widgets;
 import net.unethicalite.client.Static;
@@ -46,10 +44,30 @@ public class TeleportLoader
 	public static void refreshTeleports()
 	{
 		GameThread.invoke(() -> {
-
 			List<Teleport> teleports = new ArrayList<>();
 			if (Worlds.inMembersWorld())
 			{
+				// One click teleport items
+				for (TeleportItem tele : TeleportItem.values())
+				{
+					if (tele.canUse() && tele.getDestination().distanceTo(Players.getLocal().getWorldLocation()) > 20)
+					{
+						switch (tele)
+						{
+							case ROYAL_SEED_POD:
+								if (Game.getWildyLevel() <= 30)
+								{
+									teleports.add(itemTeleport(tele));
+								}
+							default:
+								if (Game.getWildyLevel() <= 20)
+								{
+									teleports.add(itemTeleport(tele));
+								}
+						}
+					}
+				}
+
 				if (Game.getWildyLevel() <= 20)
 				{
 					if (ringOfDueling())
@@ -94,22 +112,11 @@ public class TeleportLoader
 												   () -> jewelryTeleport("Xeric's Glade", XERICS_TALISMAN)));
 						teleports.add(new Teleport(new WorldPoint(1504, 3817, 0), 6,
 												   () -> jewelryTeleport("Xeric's Inferno", XERICS_TALISMAN)));
-						teleports.add(new Teleport(new WorldPoint(1640, 3674, 0), 6,
-												   () -> jewelryTeleport("Xeric's Heart", XERICS_TALISMAN)));
-					}
-
-					if (slayerRing())
-					{
-						teleports.add(new Teleport(new WorldPoint(2432, 3423, 0), 2,
-												   () -> jewelryTeleport("Stronghold Slayer Cave", SLAYER_RING)));
-						teleports.add(new Teleport(new WorldPoint(3422, 3537, 0), 2,
-												   () -> jewelryTeleport("Slayer Tower", SLAYER_RING)));
-						teleports.add(new Teleport(new WorldPoint(2802, 10000, 0), 2,
-												   () -> jewelryTeleport("Fremennik Slayer Dungeon", SLAYER_RING)));
-						teleports.add(new Teleport(new WorldPoint(3185, 4601, 0), 2,
-												   () -> jewelryTeleport("Tarn's Lair", SLAYER_RING)));
-						teleports.add(new Teleport(new WorldPoint(2028, 4636, 0), 2,
-												   () -> jewelryTeleport("Dark Beasts", SLAYER_RING)));
+						if (Quests.isFinished(Quest.ARCHITECTURAL_ALLIANCE))
+						{
+							teleports.add(new Teleport(new WorldPoint(1640, 3674, 0), 6,
+														() -> jewelryTeleport("Xeric's Heart", XERICS_TALISMAN)));
+						}
 					}
 
 					if (digsitePendant())
@@ -120,21 +127,6 @@ public class TeleportLoader
 								() -> jewelryTeleport("Fossil Island", DIGSITE_PENDANT)));
 						teleports.add(new Teleport(new WorldPoint(3549, 10456, 0), 6,
 								() -> jewelryTeleport("Lithkren", DIGSITE_PENDANT)));
-					}
-
-					for (TeleportItem tele : TeleportItem.values())
-					{
-						if (tele.canUse() && tele.getDestination().distanceTo(Players.getLocal().getWorldLocation()) > 20)
-						{
-							teleports.add(new Teleport(tele.getDestination(), 5, () ->
-							{
-								Item item = Inventory.getFirst(tele.getItemId());
-								if (item != null)
-								{
-									item.interact(tele.getAction());
-								}
-							}));
-						}
 					}
 				}
 
@@ -173,7 +165,19 @@ public class TeleportLoader
 						teleports.add(new Teleport(new WorldPoint(3163, 3478, 0), 2,
 							() -> jewelryTeleport("Grand Exchange", RING_OF_WEALTH)));
 						teleports.add(new Teleport(new WorldPoint(2996, 3375, 0), 2,
-							() -> jewelryTeleport("Falador", RING_OF_WEALTH)));
+								() -> jewelryTeleport("Falador", RING_OF_WEALTH)));
+
+						if (Quests.isFinished(Quest.THRONE_OF_MISCELLANIA))
+						{
+							teleports.add(new Teleport(new WorldPoint(2538, 3863, 0), 2,
+									() -> jewelryTeleport("Miscellania", RING_OF_WEALTH)));
+						}
+						if (Quests.isFinished(Quest.BETWEEN_A_ROCK))
+						{
+							teleports.add(new Teleport(new WorldPoint(2828, 10166, 0), 2,
+									() -> jewelryTeleport("Miscellania", RING_OF_WEALTH)));
+						}
+
 					}
 
 					if (amuletOfGlory())
@@ -196,6 +200,20 @@ public class TeleportLoader
 								() -> jewelryWildernessTeleport("Bandit Camp", BURNING_AMULET)));
 						teleports.add(new Teleport(new WorldPoint(3028, 3842, 0), 5,
 								() -> jewelryWildernessTeleport( "Lava Maze", BURNING_AMULET)));
+					}
+
+					if (slayerRing())
+					{
+						teleports.add(new Teleport(new WorldPoint(2432, 3423, 0), 2,
+								() -> jewelryTeleport("Stronghold Slayer Cave", SLAYER_RING)));
+						teleports.add(new Teleport(new WorldPoint(3422, 3537, 0), 2,
+								() -> jewelryTeleport("Slayer Tower", SLAYER_RING)));
+						teleports.add(new Teleport(new WorldPoint(2802, 10000, 0), 2,
+								() -> jewelryTeleport("Fremennik Slayer Dungeon", SLAYER_RING)));
+						teleports.add(new Teleport(new WorldPoint(3185, 4601, 0), 2,
+								() -> jewelryTeleport("Tarn's Lair", SLAYER_RING)));
+						teleports.add(new Teleport(new WorldPoint(2028, 4636, 0), 2,
+								() -> jewelryTeleport("Dark Beasts", SLAYER_RING)));
 					}
 				}
 			}
@@ -222,10 +240,16 @@ public class TeleportLoader
 				switch (RegionManager.hasJewelryBox())
 				{
 					case ORNATE:
-						teleports.add(pohWidgetTeleport(new WorldPoint(2538, 3863, 0), 'j'));
+						if (Quests.isFinished(Quest.THRONE_OF_MISCELLANIA))
+						{
+							teleports.add(pohWidgetTeleport(new WorldPoint(2538, 3863, 0), 'j'));
+						}
 						teleports.add(pohWidgetTeleport(new WorldPoint(3163, 3478, 0), 'k'));
 						teleports.add(pohWidgetTeleport(new WorldPoint(2996, 3375, 0), 'l'));
-						teleports.add(pohWidgetTeleport(new WorldPoint(2828, 10166, 0), 'm'));
+						if (Quests.isFinished(Quest.BETWEEN_A_ROCK))
+						{
+							teleports.add(pohWidgetTeleport(new WorldPoint(2828, 10166, 0), 'm'));
+						}
 						teleports.add(pohWidgetTeleport(new WorldPoint(3087, 3496, 0), 'n'));
 						teleports.add(pohWidgetTeleport(new WorldPoint(2918, 3176, 0), 'o'));
 						teleports.add(pohWidgetTeleport(new WorldPoint(3105, 3251, 0), 'p'));
@@ -380,6 +404,18 @@ public class TeleportLoader
 			Magic.cast(TeleportSpell.TELEPORT_TO_HOUSE.getSpell());
 
 		});
+	}
+
+	public static Teleport itemTeleport(TeleportItem teleportItem)
+	{
+			return new Teleport(teleportItem.getDestination(), 5, () ->
+			{
+				Item item = Inventory.getFirst(teleportItem.getItemId());
+				if (item != null)
+				{
+					item.interact(teleportItem.getAction());
+				}
+			});
 	}
 
 

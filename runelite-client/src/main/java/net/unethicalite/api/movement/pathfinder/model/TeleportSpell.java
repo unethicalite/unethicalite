@@ -50,6 +50,10 @@ public enum TeleportSpell
 			SpellBook.Standard.TELEPORT_TO_KOUREND,
 			new WorldPoint(1643, 3673, 0)
 	),
+	TELEPORT_TO_APE_ATOLL(
+			SpellBook.Standard.TELEPORT_TO_APE_ATOLL,
+			new WorldPoint(2796, 2791, 0)
+	),
 
 	// ANCIENT TELEPORTS
 	EDGEVILLE_HOME_TELEPORT(

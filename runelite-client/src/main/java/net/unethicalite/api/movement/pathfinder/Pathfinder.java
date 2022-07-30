@@ -5,7 +5,6 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.movement.pathfinder.model.Transport;
-import net.unethicalite.client.Static;
 
 import java.util.ArrayList;
 import java.util.HashSet;

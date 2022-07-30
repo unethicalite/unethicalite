@@ -9,6 +9,9 @@ import net.unethicalite.api.quests.Quests;
 
 public enum TeleportItem
 {
+    // Prioritize house tab
+    HOUSE_TAB(MovementConstants.HOUSE_POINT, "Break", null, ItemID.TELEPORT_TO_HOUSE),
+
     // Tabs
     WATERBIRTH_TELEPORT_TAB(new WorldPoint(2546, 3757, 0), "Break", null, ItemID.WATERBIRTH_TELEPORT),
     KHAZARD_TELEPORT_TAB(new WorldPoint(2637, 3166, 0), "Break", null, ItemID.KHAZARD_TELEPORT),
@@ -26,6 +29,16 @@ public enum TeleportItem
     YANILLE_TELEPORT_TAB(new WorldPoint(2544, 3095, 0), "Break", null, ItemID.YANILLE_TELEPORT),
     HOSIDIUS_TELEPORT_TAB(new WorldPoint(1744, 3517, 0), "Break", null, ItemID.HOSIDIUS_TELEPORT),
     SALVE_GRAVEYARD_TELEPORT_TAB(new WorldPoint(3432, 3460, 0), "Break", null, ItemID.SALVE_GRAVEYARD_TELEPORT),
+
+    RIMMINGTON_TAB(new WorldPoint(2954, 3223, 0), "Break", null, ItemID.RIMMINGTON_TELEPORT),
+    TAVERLEY_TAB(new WorldPoint(2894, 3466, 0), "Break", null, ItemID.TAVERLEY_TELEPORT),
+    POLLNIVNEACH_TAB(new WorldPoint(3339, 3004, 0), "Break", null, ItemID.POLLNIVNEACH_TELEPORT),
+    HOSIDIUS_TAB(new WorldPoint(1744, 3518, 0), "Break", null, ItemID.HOSIDIUS_TELEPORT),
+    RELLEKKA_TAB(new WorldPoint(2671, 3631, 0), "Break", null, ItemID.RELLEKKA_TELEPORT),
+    BRIMHAVEN_TAB(new WorldPoint(2758, 3177, 0), "Break", null, ItemID.BRIMHAVEN_TELEPORT),
+    YANILLE_TAB(new WorldPoint(2545, 3096, 0), "Break", null, ItemID.YANILLE_TELEPORT),
+    TROLLHEIM_TAB(new WorldPoint(2890, 3679, 0), "Break", null, ItemID.TROLLHEIM_TELEPORT),
+    PRIFDDINAS_TAB(new WorldPoint(3239, 6076, 0), "Break", null, ItemID.PRIFDDINAS_TELEPORT),
 
     // Scrolls
     FELDIP_HILLS_TELEPORT(new WorldPoint(2541, 2925, 0), "Teleport", null, ItemID.FELDIP_HILLS_TELEPORT),
@@ -52,7 +65,7 @@ public enum TeleportItem
     // Reusable
     // TODO Eh??
     //	CHAMPIONS_GUILD_CHRONICLE(new WorldPoint(3202, 3357, 0), "Champions' Guild", null, ItemID.CHRONICLE),
-    GRAND_TREE(new WorldPoint(2465, 3495, 0), "Grand Tree", null, ItemID.ROYAL_SEED_POD),
+    ROYAL_SEED_POD(new WorldPoint(2465, 3495, 0), "Commune", Quest.MONKEY_MADNESS_II, ItemID.ROYAL_SEED_POD),
     ECTOPHIAL(new WorldPoint(3659, 3523, 0), "Empty", null, ItemID.ECTOPHIAL),
     TELEPORT_CRYSTAL_LLETYA(new WorldPoint(2330, 3172, 0), "Lletya", null, MovementConstants.TELEPORT_CRYSTAL),
     TELEPORT_CRYSTAL_PRIFDDINAS(new WorldPoint(3264, 6065, 0), "Prifddinas", Quest.SONG_OF_THE_ELVES, MovementConstants.TELEPORT_CRYSTAL),

@@ -22,6 +22,7 @@ import net.unethicalite.api.widgets.Widgets;
 import net.unethicalite.client.Static;
 
 import java.util.Comparator;
+import java.util.List;
 
 @Slf4j
 public class Movement
@@ -168,5 +169,15 @@ public class Movement
 	public static int calculateDistance(WorldPoint destination)
 	{
 		return Walker.calculatePath(destination).size();
+	}
+
+	public static int calculateDistance(WorldPoint start, WorldPoint destination)
+	{
+		return calculateDistance(List.of(start), destination);
+	}
+
+	public static int calculateDistance(List<WorldPoint> start, WorldPoint destination)
+	{
+		return Walker.calculatePath(start, destination).size();
 	}
 }
