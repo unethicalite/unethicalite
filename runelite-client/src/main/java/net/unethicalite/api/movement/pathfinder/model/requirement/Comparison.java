@@ -2,7 +2,8 @@ package net.unethicalite.api.movement.pathfinder.model.requirement;
 
 import java.util.function.BiFunction;
 
-public enum Comparison implements BiFunction<Integer, Integer, Boolean> {
+public enum Comparison implements BiFunction<Integer, Integer, Boolean>
+{
     LESS_THAN,
     LESS_THAN_EQUAL,
     GREATER_THAN,
@@ -11,8 +12,10 @@ public enum Comparison implements BiFunction<Integer, Integer, Boolean> {
     ;
 
     @Override
-    public Boolean apply(Integer value, Integer expected) {
-        switch (this) {
+    public Boolean apply(Integer value, Integer expected)
+    {
+        switch (this)
+        {
             case LESS_THAN:
                 return value < expected;
             case LESS_THAN_EQUAL:

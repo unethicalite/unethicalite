@@ -252,7 +252,8 @@ public class Walker
 			// MLM Rocks
 			TileObject rockfall = TileObjects.getFirstAt(a, "Rockfall");
 			boolean hasPickaxe = Inventory.contains(Predicates.nameContains("pickaxe")) || Equipment.contains(Predicates.nameContains("pickaxe"));
-			if (rockfall != null && hasPickaxe) {
+			if (rockfall != null && hasPickaxe)
+			{
 				log.debug("Handling MLM rockfall");
 				if (!Players.getLocal().isIdle())
 				{
@@ -376,7 +377,8 @@ public class Walker
 		return path.subList(path.indexOf(nearest), path.size());
 	}
 
-	public static List<WorldPoint> calculatePath(WorldPoint destination) {
+	public static List<WorldPoint> calculatePath(WorldPoint destination)
+	{
 		Player local = Players.getLocal();
 		LinkedHashMap<WorldPoint, Teleport> teleports = buildTeleportLinks(destination);
 		List<WorldPoint> startPoints = new ArrayList<>(teleports.keySet());
@@ -384,8 +386,10 @@ public class Walker
 		return calculatePath(startPoints, destination);
 	}
 
-	public static List<WorldPoint> calculatePath(List<WorldPoint> startPoints, WorldPoint destination) {
-		if (Static.getClient().isClientThread()) {
+	public static List<WorldPoint> calculatePath(List<WorldPoint> startPoints, WorldPoint destination)
+	{
+		if (Static.getClient().isClientThread())
+		{
 			throw new RuntimeException("Calculate path cannot be called on client thread");
 		}
 		return new Pathfinder(Static.getGlobalCollisionMap(), buildTransportLinks(), startPoints, destination, RegionManager.avoidWilderness()).find();

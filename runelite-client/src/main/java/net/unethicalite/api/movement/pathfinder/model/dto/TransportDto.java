@@ -7,7 +7,8 @@ import net.unethicalite.api.movement.pathfinder.model.Transport;
 import net.unethicalite.api.movement.pathfinder.model.requirement.Requirements;
 
 @Value
-public class TransportDto {
+public class TransportDto
+{
     WorldPoint source;
     WorldPoint destination;
     String action;

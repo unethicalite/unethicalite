@@ -7,7 +7,8 @@ import net.unethicalite.api.movement.pathfinder.model.requirement.Requirements;
 
 @Value
 @AllArgsConstructor
-public class Transport {
+public class Transport
+{
     WorldPoint source;
     WorldPoint destination;
     int sourceRadius;
@@ -20,7 +21,8 @@ public class Transport {
               int sourceRadius,
               int destinationRadius,
               Runnable handler
-    ) {
+    )
+    {
         this.source = source;
         this.destination = destination;
         this.sourceRadius = sourceRadius;

@@ -8,12 +8,14 @@ import net.unethicalite.api.quests.Quests;
 import java.util.Set;
 
 @Value
-public class QuestRequirement implements Requirement {
+public class QuestRequirement implements Requirement
+{
     Quest quest;
     Set<QuestState> states;
 
     @Override
-    public Boolean get() {
+    public Boolean get()
+    {
         return states.contains(Quests.getState(quest));
     }
 }

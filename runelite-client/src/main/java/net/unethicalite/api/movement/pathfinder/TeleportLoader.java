@@ -1,6 +1,10 @@
 package net.unethicalite.api.movement.pathfinder;
 
-import net.runelite.api.*;
+import net.runelite.api.GameState;
+import net.runelite.api.Item;
+import net.runelite.api.ObjectID;
+import net.runelite.api.Quest;
+import net.runelite.api.TileObject;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
@@ -43,7 +47,8 @@ public class TeleportLoader
 
 	public static void refreshTeleports()
 	{
-		GameThread.invoke(() -> {
+		GameThread.invoke(() ->
+		{
 			List<Teleport> teleports = new ArrayList<>();
 			if (Worlds.inMembersWorld())
 			{

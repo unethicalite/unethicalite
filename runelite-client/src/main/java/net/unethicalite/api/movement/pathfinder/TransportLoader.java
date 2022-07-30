@@ -84,7 +84,8 @@ public class TransportLoader
 
 	public static void refreshTransports()
 	{
-		GameThread.invoke(() -> {
+		GameThread.invoke(() ->
+		{
 			List<Transport> filteredStatic = ALL_STATIC_TRANSPORTS.stream()
 					.filter(it -> it.getRequirements().fulfilled())
 					.collect(Collectors.toList());
@@ -185,7 +186,8 @@ public class TransportLoader
 							"Port Piscarilius"));
 				}
 
-				if (Quests.getState(Quest.LUNAR_DIPLOMACY) != QuestState.NOT_STARTED) {
+				if (Quests.getState(Quest.LUNAR_DIPLOMACY) != QuestState.NOT_STARTED)
+				{
 					transports.add(npcTransport(new WorldPoint(2222, 3796, 2), new WorldPoint(2130, 3899, 2), NpcID.CAPTAIN_BENTLEY_6650, "Travel"));
 					transports.add(npcTransport(new WorldPoint(2130, 3899, 2), new WorldPoint(2222, 3796, 2), NpcID.CAPTAIN_BENTLEY_6650, "Travel"));
 				}

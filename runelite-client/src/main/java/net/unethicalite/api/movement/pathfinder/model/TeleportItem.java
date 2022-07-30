@@ -1,6 +1,10 @@
 package net.unethicalite.api.movement.pathfinder.model;
 
-import net.runelite.api.*;
+import net.runelite.api.ItemID;
+import net.runelite.api.Quest;
+import net.runelite.api.QuestState;
+import net.runelite.api.Skill;
+import net.runelite.api.Varbits;
 import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.game.Skills;
 import net.unethicalite.api.game.Vars;
@@ -63,12 +67,13 @@ public enum TeleportItem
     TROLL_STRONGHOLD_OUTSIDE(new WorldPoint(2844, 3693, 0), "Troll Stronghold", Quest.MAKING_FRIENDS_WITH_MY_ARM, ItemID.STONY_BASALT),
 
     // Reusable
-    // TODO Eh??
-    //	CHAMPIONS_GUILD_CHRONICLE(new WorldPoint(3202, 3357, 0), "Champions' Guild", null, ItemID.CHRONICLE),
     ROYAL_SEED_POD(new WorldPoint(2465, 3495, 0), "Commune", Quest.MONKEY_MADNESS_II, ItemID.ROYAL_SEED_POD),
     ECTOPHIAL(new WorldPoint(3659, 3523, 0), "Empty", null, ItemID.ECTOPHIAL),
     TELEPORT_CRYSTAL_LLETYA(new WorldPoint(2330, 3172, 0), "Lletya", null, MovementConstants.TELEPORT_CRYSTAL),
     TELEPORT_CRYSTAL_PRIFDDINAS(new WorldPoint(3264, 6065, 0), "Prifddinas", Quest.SONG_OF_THE_ELVES, MovementConstants.TELEPORT_CRYSTAL),
+
+    // TODO move these to teleport loader since they are equippable...
+    //	CHAMPIONS_GUILD_CHRONICLE(new WorldPoint(3202, 3357, 0), "Champions' Guild", null, ItemID.CHRONICLE),
     RELLEKKKA_LYRE(new WorldPoint(2664, 3643, 0), "Rellekka", Quest.THE_FREMENNIK_TRIALS, MovementConstants.ENCHANTED_LYRE),
     WATERBIRTH_ISLAND_LYRE(new WorldPoint(2550, 3756, 0), "Waterbirth Island", Quest.THE_FREMENNIK_TRIALS, MovementConstants.ENCHANTED_LYRE),
     NEITIZNOT_LYRE(new WorldPoint(2336, 3801, 0), "Neitiznot", Quest.THE_FREMENNIK_TRIALS, MovementConstants.ENCHANTED_LYRE),
