@@ -5,6 +5,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.movement.pathfinder.model.Transport;
+import net.unethicalite.client.Static;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,6 +46,10 @@ public class Pathfinder implements Callable<List<WorldPoint>>
 		this.start.addAll(start.stream().map(point -> new Node(point, null)).collect(Collectors.toList()));
 		this.nearest = null;
 		this.avoidWilderness = avoidWilderness;
+		if (collisionMap.fullBlock(target))
+		{
+			log.warn("Walking to a block tiled {}, pathfinder will be slow", target);
+		}
 	}
 
 	private void addNeighbors(Node node)

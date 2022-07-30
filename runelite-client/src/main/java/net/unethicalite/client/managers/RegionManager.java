@@ -9,6 +9,7 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.Tile;
 import net.runelite.api.coords.Direction;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.WidgetInfo;
@@ -202,6 +203,20 @@ public class RegionManager
 				e.printStackTrace();
 			}
 		}, 5, TimeUnit.SECONDS);
+	}
+
+	@Subscribe(priority = Integer.MAX_VALUE)
+	public void onGameStateChanged(GameStateChanged event)
+	{
+		// Force a refresh ~1 second after logging in so that everything has loaded.
+		if (event.getGameState() == GameState.LOGGED_IN)
+		{
+			executorService.schedule(() -> {
+				INVENTORY_CHANGED = true;
+				TeleportLoader.refreshTeleports();
+				TransportLoader.refreshTransports();
+			}, 1000, TimeUnit.MILLISECONDS);
+		}
 	}
 
 	public boolean isTransport(List<Transport> transports, WorldPoint from, WorldPoint to)
