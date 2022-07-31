@@ -92,36 +92,7 @@ public class TransportLoader
 
 			List<Transport> transports = new ArrayList<>();
 
-			boolean princeAliCompleted = Quests.isFinished(Quest.PRINCE_ALI_RESCUE);
 			int gold = Inventory.getFirst(995) != null ? Inventory.getFirst(995).getQuantity() : 0;
-			if (gold >= 10 || princeAliCompleted)
-			{
-				// The door here is weird, the transform actions and name return null
-				transports.add(objectTransport(
-						new WorldPoint(3267, 3228, 0),
-						new WorldPoint(3268, 3228, 0),
-						TileObjects.getFirstAt(3268, 3228, 0, 44599),
-						princeAliCompleted ? 0 : 3)
-				);
-				transports.add(objectTransport(
-						new WorldPoint(3268, 3228, 0),
-						new WorldPoint(3267, 3228, 0),
-						TileObjects.getFirstAt(3268, 3228, 0, 44599),
-						princeAliCompleted ? 0 : 3)
-				);
-				transports.add(objectTransport(
-						new WorldPoint(3267, 3227, 0),
-						new WorldPoint(3268, 3227, 0),
-						TileObjects.getFirstAt(3268, 3227, 0, 44598),
-						princeAliCompleted ? 0 : 3)
-				);
-				transports.add(objectTransport(
-						new WorldPoint(3268, 3227, 0),
-						new WorldPoint(3267, 3227, 0),
-						TileObjects.getFirstAt(3268, 3227, 0, 44598),
-						princeAliCompleted ? 0 : 3)
-				);
-			}
 
 			if (Worlds.inMembersWorld())
 			{

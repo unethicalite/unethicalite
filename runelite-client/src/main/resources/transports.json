@@ -15800,7 +15800,14 @@
     "requirements": {
       "itemRequirements": [],
       "skillRequirements": [],
-      "varRequirements": [],
+      "varRequirements": [
+        {
+          "comparison": "GREATER_THAN",
+          "type": "VARP",
+          "var": 1780,
+          "value": 0
+        }
+      ],
       "questRequirements": []
     }
   },
@@ -15820,7 +15827,14 @@
     "requirements": {
       "itemRequirements": [],
       "skillRequirements": [],
-      "varRequirements": [],
+      "varRequirements": [
+        {
+          "comparison": "GREATER_THAN",
+          "type": "VARP",
+          "var": 1780,
+          "value": 0
+        }
+      ],
       "questRequirements": []
     }
   },
@@ -15840,7 +15854,14 @@
     "requirements": {
       "itemRequirements": [],
       "skillRequirements": [],
-      "varRequirements": [],
+      "varRequirements": [
+        {
+          "comparison": "GREATER_THAN",
+          "type": "VARP",
+          "var": 1780,
+          "value": 0
+        }
+      ],
       "questRequirements": []
     }
   },
@@ -15860,7 +15881,14 @@
     "requirements": {
       "itemRequirements": [],
       "skillRequirements": [],
-      "varRequirements": [],
+      "varRequirements": [
+        {
+          "comparison": "GREATER_THAN",
+          "type": "VARP",
+          "var": 1780,
+          "value": 0
+        }
+      ],
       "questRequirements": []
     }
   },
@@ -15880,7 +15908,14 @@
     "requirements": {
       "itemRequirements": [],
       "skillRequirements": [],
-      "varRequirements": [],
+      "varRequirements": [
+        {
+          "comparison": "GREATER_THAN",
+          "type": "VARP",
+          "var": 1780,
+          "value": 0
+        }
+      ],
       "questRequirements": []
     }
   },
@@ -15900,7 +15935,14 @@
     "requirements": {
       "itemRequirements": [],
       "skillRequirements": [],
-      "varRequirements": [],
+      "varRequirements": [
+        {
+          "comparison": "GREATER_THAN",
+          "type": "VARP",
+          "var": 1780,
+          "value": 0
+        }
+      ],
       "questRequirements": []
     }
   },
@@ -20317,86 +20359,6 @@
     },
     "action": "Climb-down",
     "objectId": 16685,
-    "requirements": {
-      "itemRequirements": [],
-      "skillRequirements": [],
-      "varRequirements": [],
-      "questRequirements": []
-    }
-  },
-  {
-    "source": {
-      "x": 3267,
-      "y": 3228,
-      "plane": 0
-    },
-    "destination": {
-      "x": 3268,
-      "y": 3228,
-      "plane": 0
-    },
-    "action": "Pay-toll(10gp)",
-    "objectId": 2883,
-    "requirements": {
-      "itemRequirements": [],
-      "skillRequirements": [],
-      "varRequirements": [],
-      "questRequirements": []
-    }
-  },
-  {
-    "source": {
-      "x": 3268,
-      "y": 3228,
-      "plane": 0
-    },
-    "destination": {
-      "x": 3267,
-      "y": 3228,
-      "plane": 0
-    },
-    "action": "Pay-toll(10gp)",
-    "objectId": 2883,
-    "requirements": {
-      "itemRequirements": [],
-      "skillRequirements": [],
-      "varRequirements": [],
-      "questRequirements": []
-    }
-  },
-  {
-    "source": {
-      "x": 3267,
-      "y": 3227,
-      "plane": 0
-    },
-    "destination": {
-      "x": 3268,
-      "y": 3227,
-      "plane": 0
-    },
-    "action": "Pay-toll(10gp)",
-    "objectId": 2882,
-    "requirements": {
-      "itemRequirements": [],
-      "skillRequirements": [],
-      "varRequirements": [],
-      "questRequirements": []
-    }
-  },
-  {
-    "source": {
-      "x": 3268,
-      "y": 3227,
-      "plane": 0
-    },
-    "destination": {
-      "x": 3267,
-      "y": 3227,
-      "plane": 0
-    },
-    "action": "Pay-toll(10gp)",
-    "objectId": 2882,
     "requirements": {
       "itemRequirements": [],
       "skillRequirements": [],
@@ -95617,6 +95579,262 @@
       "skillRequirements": [],
       "varRequirements": [],
       "questRequirements": []
+    }
+  },
+  {
+    "source": {
+      "x": 3267,
+      "y": 3228,
+      "plane": 0
+    },
+    "destination": {
+      "x": 3268,
+      "y": 3228,
+      "plane": 0
+    },
+    "action": "Pay-toll(10gp)",
+    "objectId": 44599,
+    "requirements": {
+      "itemRequirements": [
+        {
+          "reduction": "AND",
+          "equipped": false,
+          "ids": [
+            995
+          ],
+          "amount": 10
+        }
+      ],
+      "skillRequirements": [],
+      "varRequirements": [],
+      "questRequirements": [
+        {
+          "quest": "PRINCE_ALI_RESCUE",
+          "states": [
+            "NOT_STARTED",
+            "IN_PROGRESS"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "source": {
+      "x": 3268,
+      "y": 3228,
+      "plane": 0
+    },
+    "destination": {
+      "x": 3267,
+      "y": 3228,
+      "plane": 0
+    },
+    "action": "Pay-toll(10gp)",
+    "objectId": 44599,
+    "requirements": {
+      "itemRequirements": [
+        {
+          "reduction": "AND",
+          "equipped": false,
+          "ids": [
+            995
+          ],
+          "amount": 10
+        }
+      ],
+      "skillRequirements": [],
+      "varRequirements": [],
+      "questRequirements": [
+        {
+          "quest": "PRINCE_ALI_RESCUE",
+          "states": [
+            "NOT_STARTED",
+            "IN_PROGRESS"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "source": {
+      "x": 3267,
+      "y": 3227,
+      "plane": 0
+    },
+    "destination": {
+      "x": 3268,
+      "y": 3227,
+      "plane": 0
+    },
+    "action": "Pay-toll(10gp)",
+    "objectId": 44598,
+    "requirements": {
+      "itemRequirements": [
+        {
+          "reduction": "AND",
+          "equipped": false,
+          "ids": [
+            995
+          ],
+          "amount": 10
+        }
+      ],
+      "skillRequirements": [],
+      "varRequirements": [],
+      "questRequirements": [
+        {
+          "quest": "PRINCE_ALI_RESCUE",
+          "states": [
+            "NOT_STARTED",
+            "IN_PROGRESS"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "source": {
+      "x": 3268,
+      "y": 3227,
+      "plane": 0
+    },
+    "destination": {
+      "x": 3267,
+      "y": 3227,
+      "plane": 0
+    },
+    "action": "Pay-toll(10gp)",
+    "objectId": 44598,
+    "requirements": {
+      "itemRequirements": [
+        {
+          "reduction": "AND",
+          "equipped": false,
+          "ids": [
+            995
+          ],
+          "amount": 10
+        }
+      ],
+      "skillRequirements": [],
+      "varRequirements": [],
+      "questRequirements": [
+        {
+          "quest": "PRINCE_ALI_RESCUE",
+          "states": [
+            "NOT_STARTED",
+            "IN_PROGRESS"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "source": {
+      "x": 3267,
+      "y": 3228,
+      "plane": 0
+    },
+    "destination": {
+      "x": 3268,
+      "y": 3228,
+      "plane": 0
+    },
+    "action": "Open",
+    "objectId": 44598,
+    "requirements": {
+      "itemRequirements": [],
+      "skillRequirements": [],
+      "varRequirements": [],
+      "questRequirements": [
+        {
+          "quest": "PRINCE_ALI_RESCUE",
+          "states": [
+            "FINISHED"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "source": {
+      "x": 3268,
+      "y": 3228,
+      "plane": 0
+    },
+    "destination": {
+      "x": 3267,
+      "y": 3228,
+      "plane": 0
+    },
+    "action": "Open",
+    "objectId": 44598,
+    "requirements": {
+      "itemRequirements": [],
+      "skillRequirements": [],
+      "varRequirements": [],
+      "questRequirements": [
+        {
+          "quest": "PRINCE_ALI_RESCUE",
+          "states": [
+            "FINISHED"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "source": {
+      "x": 3267,
+      "y": 3227,
+      "plane": 0
+    },
+    "destination": {
+      "x": 3268,
+      "y": 3227,
+      "plane": 0
+    },
+    "action": "Open",
+    "objectId": 44598,
+    "requirements": {
+      "itemRequirements": [],
+      "skillRequirements": [],
+      "varRequirements": [],
+      "questRequirements": [
+        {
+          "quest": "PRINCE_ALI_RESCUE",
+          "states": [
+            "FINISHED"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "source": {
+      "x": 3268,
+      "y": 3227,
+      "plane": 0
+    },
+    "destination": {
+      "x": 3267,
+      "y": 3227,
+      "plane": 0
+    },
+    "action": "Open",
+    "objectId": 44598,
+    "requirements": {
+      "itemRequirements": [],
+      "skillRequirements": [],
+      "varRequirements": [],
+      "questRequirements": [
+        {
+          "quest": "PRINCE_ALI_RESCUE",
+          "states": [
+            "FINISHED"
+          ]
+        }
+      ]
     }
   }
 ]
