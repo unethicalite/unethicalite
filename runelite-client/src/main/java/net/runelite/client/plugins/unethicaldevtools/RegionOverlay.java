@@ -22,7 +22,6 @@ import net.unethicalite.api.scene.Tiles;
 import net.unethicalite.api.utils.CoordUtils;
 import net.unethicalite.api.utils.DrawUtils;
 import net.unethicalite.api.widgets.Widgets;
-import net.unethicalite.client.Static;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -178,7 +177,7 @@ public class RegionOverlay extends Overlay
 					.setType(MenuAction.RUNELITE_OVERLAY)
 					.onClick(e ->
 					{
-						WorldPoint clickPoint = Static.getClient().getRenderOverview().getMouseLocation();
+						WorldPoint clickPoint = CoordUtils.worldMapToWorldPoint(mouse);
 						if (clickPoint == null)
 						{
 							return;

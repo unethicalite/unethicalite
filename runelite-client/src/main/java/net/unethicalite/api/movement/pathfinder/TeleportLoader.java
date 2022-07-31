@@ -53,18 +53,6 @@ public class TeleportLoader
 			List<Teleport> teleports = new ArrayList<>();
 			if (Worlds.inMembersWorld())
 			{
-				// Minigames
-				if (Minigames.canTeleport())
-				{
-					for (Minigames.Destination tp : Minigames.Destination.values())
-					{
-						if (tp.canUse())
-						{
-							teleports.add(new Teleport(tp.getLocation(), 2, () -> Minigames.teleport(tp)));
-						}
-					}
-				}
-
 				// One click teleport items
 				for (TeleportItem tele : TeleportItem.values())
 				{
@@ -145,6 +133,18 @@ public class TeleportLoader
 								() -> jewelryTeleport("Fossil Island", DIGSITE_PENDANT)));
 						teleports.add(new Teleport(new WorldPoint(3549, 10456, 0), 6,
 								() -> jewelryTeleport("Lithkren", DIGSITE_PENDANT)));
+					}
+
+					// Minigames
+					if (Minigames.canTeleport())
+					{
+						for (Minigames.Destination tp : Minigames.Destination.values())
+						{
+							if (tp.canUse())
+							{
+								teleports.add(new Teleport(tp.getLocation(), 2, () -> Minigames.teleport(tp)));
+							}
+						}
 					}
 				}
 
