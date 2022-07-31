@@ -210,15 +210,15 @@ public class TeleportLoader
 					if (slayerRing())
 					{
 						teleports.add(new Teleport(new WorldPoint(2432, 3423, 0), 2,
-								() -> jewelryTeleport("Stronghold Slayer Cave", SLAYER_RING)));
+								() -> slayerRingTeleport("Stronghold Slayer Cave", SLAYER_RING)));
 						teleports.add(new Teleport(new WorldPoint(3422, 3537, 0), 2,
-								() -> jewelryTeleport("Slayer Tower", SLAYER_RING)));
+								() -> slayerRingTeleport("Slayer Tower", SLAYER_RING)));
 						teleports.add(new Teleport(new WorldPoint(2802, 10000, 0), 2,
-								() -> jewelryTeleport("Fremennik Slayer Dungeon", SLAYER_RING)));
+								() -> slayerRingTeleport("Fremennik Slayer Dungeon", SLAYER_RING)));
 						teleports.add(new Teleport(new WorldPoint(3185, 4601, 0), 2,
-								() -> jewelryTeleport("Tarn's Lair", SLAYER_RING)));
+								() -> slayerRingTeleport("Tarn's Lair", SLAYER_RING)));
 						teleports.add(new Teleport(new WorldPoint(2028, 4636, 0), 2,
-								() -> jewelryTeleport("Dark Beasts", SLAYER_RING)));
+								() -> slayerRingTeleport("Dark Beasts", SLAYER_RING)));
 					}
 				}
 			}
@@ -483,6 +483,32 @@ public class TeleportLoader
 				.anyMatch(it -> it.getText() != null && WILDY_PATTERN.matcher(it.getText()).matches()))
 		{
 			Dialog.chooseOption(1);
+		}
+	}
+
+	public static void slayerRingTeleport(String target, int... ids)
+	{
+		Item ring = Inventory.getFirst(ids);
+
+		if (ring == null)
+		{
+			ring = Equipment.getFirst(ids);
+		}
+
+		if (ring != null)
+		{
+			if (!Dialog.isViewingOptions())
+			{
+				ring.interact("Teleport");
+				Time.sleepTicksUntil(Dialog::isViewingOptions, 2);
+				return;
+			}
+			if (Dialog.hasOption("Teleport"))
+			{
+				Dialog.chooseOption("Teleport");
+				return;
+			}
+			Dialog.chooseOption(target);
 		}
 	}
 
