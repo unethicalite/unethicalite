@@ -122,7 +122,7 @@ public class Pathfinder implements Callable<List<WorldPoint>>
 	{
 		long startTime = System.currentTimeMillis();
 		List<WorldPoint> path = find(5_000_000);
-		log.info("Path calculation took {} ms to {}", System.currentTimeMillis() - startTime, target);
+		log.debug("Path calculation took {} ms to {}", System.currentTimeMillis() - startTime, target);
 		return path;
 	}
 

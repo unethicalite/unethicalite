@@ -25,6 +25,7 @@ import net.unethicalite.api.movement.pathfinder.model.TeleportItem;
 import net.unethicalite.api.movement.pathfinder.model.TeleportSpell;
 import net.unethicalite.api.quests.Quests;
 import net.unethicalite.api.widgets.Dialog;
+import net.unethicalite.api.widgets.Minigames;
 import net.unethicalite.api.widgets.Widgets;
 import net.unethicalite.client.Static;
 import net.unethicalite.client.managers.RegionManager;
@@ -52,6 +53,18 @@ public class TeleportLoader
 			List<Teleport> teleports = new ArrayList<>();
 			if (Worlds.inMembersWorld())
 			{
+				// Minigames
+				if (Minigames.canTeleport())
+				{
+					for (Minigames.Destination tp : Minigames.Destination.values())
+					{
+						if (tp.canUse())
+						{
+							teleports.add(new Teleport(tp.getLocation(), 2, () -> Minigames.teleport(tp)));
+						}
+					}
+				}
+
 				// One click teleport items
 				for (TeleportItem tele : TeleportItem.values())
 				{
