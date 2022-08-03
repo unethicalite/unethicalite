@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import lombok.Getter;
+import lombok.Value;
 import net.runelite.api.Client;
 import net.runelite.api.CollisionData;
 import net.runelite.api.CollisionDataFlag;
@@ -40,6 +41,7 @@ import net.runelite.api.Constants;
 /**
  * Represents an area on the world.
  */
+@Value
 public class WorldArea
 {
 	/**
