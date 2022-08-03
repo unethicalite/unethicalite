@@ -1,7 +1,5 @@
 package net.unethicalite.client.managers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.CollisionData;
 import net.runelite.api.CollisionDataFlag;
@@ -18,25 +16,18 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.unethicalite.regions.TileFlag;
-import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.game.Game;
 import net.unethicalite.api.movement.Reachable;
 import net.unethicalite.api.movement.pathfinder.TeleportLoader;
 import net.unethicalite.api.movement.pathfinder.TransportLoader;
 import net.unethicalite.api.movement.pathfinder.Walker;
-import net.unethicalite.api.movement.pathfinder.model.poh.JewelryBox;
 import net.unethicalite.api.movement.pathfinder.model.Transport;
+import net.unethicalite.api.movement.pathfinder.model.poh.JewelryBox;
 import net.unethicalite.api.scene.Tiles;
 import net.unethicalite.client.Static;
 import net.unethicalite.client.config.UnethicaliteConfig;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +40,6 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class RegionManager
 {
-	public static final MediaType JSON_MEDIATYPE = MediaType.parse("application/json");
-	public static final Gson GSON = new GsonBuilder().create();
-	
 	private static final Set<Integer> REFRESH_WIDGET_IDS = Set.of(
 			WidgetInfo.QUEST_COMPLETED_NAME_TEXT.getGroupId(),
 			WidgetInfo.LEVEL_UP_LEVEL.getGroupId()
@@ -83,11 +71,6 @@ public class RegionManager
 
 	private static boolean REFRESH_PATH = false;
 
-	@Inject
-	@Named("unethicalite.api.url")
-	private String apiUrl;
-	@Inject
-	private OkHttpClient okHttpClient;
 	@Inject
 	private ScheduledExecutorService executorService;
 
@@ -140,79 +123,14 @@ public class RegionManager
 		Static.getEventBus().register(this);
 	}
 
-	public void sendRegion()
-	{
-		if (Game.getState() != GameState.LOGGED_IN || !Static.getUnethicaliteConfig().regions())
-		{
-			return;
-		}
-
-		if (Static.getClient().isInInstancedRegion())
-		{
-			executorService.schedule(() ->
-			{
-				Request request = new Request.Builder()
-						.get()
-						.url(apiUrl + "/regions/instance/" + Players.getLocal().getWorldLocation().getRegionID())
-						.build();
-
-				try (Response response = okHttpClient.newCall(request)
-						.execute())
-				{
-					int code = response.code();
-					if (code != 200)
-					{
-						log.error("Instance store request was unsuccessful: {}", code);
-						return;
-					}
-
-					log.debug("Instanced region stored successfully");
-				}
-				catch (Exception e)
-				{
-					log.error("Failed to POST: {}", e.getMessage());
-					e.printStackTrace();
-				}
-			}, 5_000, TimeUnit.MILLISECONDS);
-
-			return;
-		}
-
-		executorService.schedule(() ->
-		{
-			String json = GSON.toJson(getTileFlags());
-			RequestBody body = RequestBody.create(JSON_MEDIATYPE, json);
-			Request request = new Request.Builder()
-					.post(body)
-					.url(apiUrl + "/regions")
-					.build();
-			try (Response response = okHttpClient.newCall(request)
-					.execute())
-			{
-				int code = response.code();
-				if (code != 200)
-				{
-					log.error("Request was unsuccessful: {}", code);
-					return;
-				}
-
-				log.debug("Region saved successfully");
-			}
-			catch (Exception e)
-			{
-				log.error("Failed to POST: {}", e.getMessage());
-				e.printStackTrace();
-			}
-		}, 5, TimeUnit.SECONDS);
-	}
-
 	@Subscribe(priority = Integer.MAX_VALUE)
 	public void onGameStateChanged(GameStateChanged event)
 	{
 		// Force a refresh ~1 second after logging in so that everything has loaded.
 		if (event.getGameState() == GameState.LOGGED_IN)
 		{
-			executorService.schedule(() -> {
+			executorService.schedule(() ->
+			{
 				REFRESH_PATH = true;
 				TeleportLoader.refreshTeleports();
 				TransportLoader.refreshTransports();
