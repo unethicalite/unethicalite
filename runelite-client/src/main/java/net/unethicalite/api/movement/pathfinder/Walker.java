@@ -432,7 +432,12 @@ public class Walker
 			currentDestination = destination;
 		}
 
-		if (!destination.equals(currentDestination) || RegionManager.shouldRefreshPath() || forced)
+		boolean sameDestination = destination.getX() == currentDestination.getX()
+			&& destination.getY() == currentDestination.getY()
+			&& destination.getPlane() == currentDestination.getPlane()
+			&& destination.getWidth() == currentDestination.getWidth()
+			&& destination.getHeight() == currentDestination.getHeight();
+		if (!sameDestination || RegionManager.shouldRefreshPath() || forced)
 		{
 			pathFuture.cancel(true);
 			pathFuture = executor.submit(new Pathfinder(Static.getGlobalCollisionMap(), buildTransportLinks(), startPoints, destination, avoidWilderness));
