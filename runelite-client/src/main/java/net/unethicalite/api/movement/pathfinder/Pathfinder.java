@@ -159,7 +159,7 @@ public class Pathfinder implements Callable<List<WorldPoint>>
 				return node.path();
 			}
 
-			int distance = node.position.distanceTo(target.getCenter());
+			int distance = target.distanceTo(node.position);
 			if (nearest == null || distance < bestDistance)
 			{
 				nearest = node;

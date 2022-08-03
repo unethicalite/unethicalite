@@ -529,7 +529,7 @@ public class Walker
 		for (Teleport teleport : TeleportLoader.buildTeleports())
 		{
 			if (teleport.getDestination().distanceTo(local.getWorldLocation()) > 50
-					&& local.getWorldLocation().distanceTo(destination.getCenter()) > teleport.getDestination().distanceTo(destination.getCenter()) + 20)
+					&& destination.distanceTo(local) > destination.distanceTo(teleport.getDestination()) + 20)
 			{
 				out.putIfAbsent(teleport.getDestination(), teleport);
 			}
